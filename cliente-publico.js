@@ -48,45 +48,31 @@ async function carregarHorarios(){
     : "<option>Nenhum horário disponível</option>";
 }
 
-function criarLembreteAgenda({nome,servicoTexto,data,horario}){
-  const inicio = new Date(`${data}T${horario}:00`);
+// Abre o calendário sem baixar arquivo. O horário é enviado como horário local,
+// evitando a conversão UTC que causava diferença de fuso.
+function abrirCalendario({nome,servicoTexto,data,horario}){
+  const [ano,mes,dia] = data.split("-").map(Number);
+  const [hora,minuto] = horario.split(":").map(Number);
+  const inicio = new Date(ano, mes-1, dia, hora, minuto);
   const fim = new Date(inicio.getTime() + 60 * 60 * 1000);
   const pad = n => String(n).padStart(2,"0");
-  const utc = d => `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
-  const agora = utc(new Date());
-  const uid = `joy-bronze-${Date.now()}@joybronze`;
-  const titulo = `☀️ Joy Bronze — ${servicoTexto.replace(/\s+—\s+R\$.*$/i,"")}`;
-  const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Joy Bronze//Agendamento//PT-BR",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VEVENT",
-    `UID:${uid}`,
-    `DTSTAMP:${agora}`,
-    `DTSTART:${utc(inicio)}`,
-    `DTEND:${utc(fim)}`,
-    `SUMMARY:${titulo.replace(/[,;\\]/g," ")}`,
-    `DESCRIPTION:Cliente: ${nome}\\nServiço: ${servicoTexto}\\nJoy Bronze` ,
-    "BEGIN:VALARM",
-    "TRIGGER:-PT30M",
-    "ACTION:DISPLAY",
-    "DESCRIPTION:Lembrete: seu horário na Joy Bronze é daqui a 30 minutos.",
-    "END:VALARM",
-    "END:VEVENT",
-    "END:VCALENDAR"
-  ].join("\r\n");
+  const formatoLocal = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const titulo = `Joy Bronze — ${servicoTexto.replace(/\s+—\s+R\$.*$/i,"")}`;
+  const detalhes = `Cliente: ${nome}\nServiço: ${servicoTexto}\nJoy Bronze`;
+  const fuso = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Sao_Paulo";
 
-  const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `joy-bronze-${data}-${horario.replace(":","h")}.ics`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 3000);
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: titulo,
+    dates: `${formatoLocal(inicio)}/${formatoLocal(fim)}`,
+    details: detalhes,
+    ctz: fuso,
+    reminders: "on",
+    crm: "ALERT",
+    r: "-PT30M"
+  });
+
+  window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,"_blank","noopener,noreferrer");
 }
 
 async function consultar(){
@@ -143,8 +129,8 @@ $("#reservar").onclick = async ()=>{
   const mensagem = `☀️ *Novo agendamento — Joy Bronze*\n\n👤 Cliente: ${nome}\n📱 Telefone: ${$("#telefone").value}\n💆 Serviço: ${servicoTexto}\n📅 Data: ${dataFormatada}\n🕐 Horário: ${horario}\n\n✅ Reserva realizada pelo site.`;
   const whatsappUrl = `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(mensagem)}`;
 
-  const adicionarAgenda = confirm(`Reserva realizada com sucesso! ☀️\n\nDeseja adicionar o agendamento à agenda do seu celular?\n\nSerá criado um lembrete para avisar 30 minutos antes.`);
-  if(adicionarAgenda) criarLembreteAgenda({nome,servicoTexto,data,horario});
+  const adicionarAgenda = confirm(`Reserva realizada com sucesso! ☀️\n\nDeseja adicionar este agendamento à agenda do seu celular?\n\nSim, adicionar → abre o calendário com os dados preenchidos.\nAgora não → segue normalmente.\n\nO lembrete será de 30 minutos antes quando o calendário oferecer esse suporte.`);
+  if(adicionarAgenda) abrirCalendario({nome,servicoTexto,data,horario});
 
   alert("Reserva realizada com sucesso! ☀️\n\nAbrindo o WhatsApp para enviar a confirmação.");
   window.open(whatsappUrl,"_blank","noopener,noreferrer");
