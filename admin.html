@@ -1,37 +1,9 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Joy Bronze Admin</title><link rel="stylesheet" href="style.css"></head>
+<title>Joy Bronze — Administração</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header><div>☀️ <b>Joy Bronze — Administração</b></div><button id="logout">Sair</button></header>
+<header><div>☀️ <b>Joy Bronze — Administração</b></div><div><a class="admin-link" href="configuracoes.html">⚙️ Configurações</a> <button id="logout">Sair</button></div></header>
 <main class="container">
-<section class="card">
-<h2>📅 Agendamentos</h2>
-<label>Filtrar por data</label>
-<input id="filtroData" type="date">
-<div id="agenda">Carregando...</div>
-</section>
-
-<section class="card">
-<h2>⚙️ Configurações</h2>
-<input id="nomeSalao" placeholder="Nome do salão">
-<input id="abertura" type="time" value="09:00">
-<input id="fechamento" type="time" value="18:00">
-<input id="intervalo" type="number" value="60" placeholder="Intervalo em minutos">
-<h3>🔔 Lembretes</h3>
-<label><input id="lembrete24" type="checkbox" checked> 24 horas antes</label>
-<label><input id="lembrete2" type="checkbox"> 2 horas antes</label>
-<label><input id="lembrete1" type="checkbox"> 1 hora antes</label>
-<label><input id="lembrete30" type="checkbox"> 30 minutos antes</label>
-<button id="salvarConfig">Salvar configurações</button>
-</section>
-
-<section class="card">
-<h2>💆 Serviços</h2>
-<input id="novoServico" placeholder="Nome do serviço">
-<input id="duracao" type="number" placeholder="Duração em minutos">
-<input id="preco" type="number" step="0.01" placeholder="Preço">
-<button id="addServico">Adicionar serviço</button>
-<div id="servicos"></div>
-</section>
-</main>
-<script type="module" src="admin.js"></script></body></html>
+<section class="card"><h2>📅 Agendamentos</h2><label>Filtrar por data</label><input id="filtroData" type="date"><div id="agenda">Carregando...</div></section>
+<section class="card"><h2>💆 Serviços</h2><input id="novoServico" placeholder="Nome do serviço"><input id="duracao" type="number" placeholder="Duração em minutos"><input id="preco" type="number" step="0.01" placeholder="Preço"><button id="addServico">Adicionar serviço</button><div id="servicos"></div></section>
+</main><script type="module" src="admin.js"></script></body></html>
