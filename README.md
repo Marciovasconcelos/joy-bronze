@@ -1,17 +1,22 @@
-# Bronze Agenda
+# Joy Bronze ☀️
 
-## Passos
-1. Abra `firebase-config.js` e cole sua configuração do Firebase.
-2. No Firebase Authentication, habilite **E-mail/Senha**.
-3. Crie no Firestore o primeiro usuário administrador:
-   - Crie uma conta normalmente.
-   - Em `usuarios/{UID}`, altere `tipo` de `cliente` para `admin`.
-4. Publique os arquivos no GitHub Pages ou Firebase Hosting.
+## Cliente
+Não precisa de conta, senha ou e-mail.
 
-## Lembretes
-Esta versão inclui:
-- pedido de permissão para notificações;
-- alerta e vibração na confirmação;
-- configurações de lembrete no painel Admin.
+A cliente informa apenas:
+- Nome
+- Telefone
+- Serviço
+- Data
+- Horário
 
-Para lembretes garantidos mesmo com o navegador fechado, a próxima etapa é integrar Firebase Cloud Messaging e um backend/Cloud Function para disparar as notificações no horário correto.
+## Administração
+Acesse `admin-login.html`.
+
+O administrador continua usando:
+- E-mail
+- Senha
+
+Para ter acesso administrativo, o documento do usuário em `usuarios/{UID}` deve conter:
+
+`tipo: "admin"`

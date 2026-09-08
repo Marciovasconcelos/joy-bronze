@@ -1,20 +1,30 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bronze Agenda</title><link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="auth-card">
-  <div class="brand">☀️ <b>Bronze Agenda</b><span>Agendamentos online</span></div>
-  <h1>Bem-vinda</h1>
-  <p>Entre para reservar seu horário.</p>
-  <input id="email" type="email" placeholder="E-mail">
-  <input id="password" type="password" placeholder="Senha">
-  <button id="loginBtn">Entrar</button>
-  <button class="secondary" id="registerBtn">Criar conta</button>
-  <p id="msg"></p>
+<title>Joy Bronze</title><link rel="stylesheet" href="style.css">
+</head><body>
+<header><div>☀️ <b>Joy Bronze</b></div><a class="admin-link" href="admin-login.html">🔐 Área Administrativa</a></header>
+<main class="container">
+<section class="hero"><h1>Agende seu bronze ☀️</h1><p>Escolha seu serviço, data e horário.</p></section>
+<div class="grid">
+<section class="card">
+<h2>Seus dados</h2>
+<label>Nome completo</label><input id="nome" placeholder="Digite seu nome">
+<label>Telefone</label><input id="telefone" inputmode="tel" placeholder="(00) 00000-0000">
+<h2>Nova reserva</h2>
+<label>Serviço</label><select id="servico"></select>
+<label>Data</label><input id="data" type="date">
+<label>Horário disponível</label><select id="horario"></select>
+<button id="reservar">Confirmar reserva</button>
+</section>
+<section class="card">
+<h2>Consultar reserva</h2>
+<p>Digite seu telefone para ver seus próximos horários.</p>
+<input id="consultaTelefone" inputmode="tel" placeholder="Seu telefone">
+<button id="consultar">Consultar</button>
+<div id="lista"></div>
+</section>
 </div>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="app.js"></script>
+</main>
+<script type="module" src="cliente-publico.js"></script>
 </body></html>
