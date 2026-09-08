@@ -48,8 +48,6 @@ async function carregarHorarios(){
     : "<option>Nenhum horário disponível</option>";
 }
 
-// Abre o calendário sem baixar arquivo. O horário é enviado como horário local,
-// evitando a conversão UTC que causava diferença de fuso.
 function abrirCalendario({nome,servicoTexto,data,horario}){
   const [ano,mes,dia] = data.split("-").map(Number);
   const [hora,minuto] = horario.split(":").map(Number);
@@ -57,21 +55,10 @@ function abrirCalendario({nome,servicoTexto,data,horario}){
   const fim = new Date(inicio.getTime() + 60 * 60 * 1000);
   const pad = n => String(n).padStart(2,"0");
   const formatoLocal = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-  const titulo = `Joy Bronze — ${servicoTexto.replace(/\s+—\s+R\$.*$/i,"")}`;
+  const titulo = `Joy Bronze - ${servicoTexto.replace(/\s+—\s+R\$.*$/i,"")}`;
   const detalhes = `Cliente: ${nome}\nServiço: ${servicoTexto}\nJoy Bronze`;
   const fuso = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Sao_Paulo";
-
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: titulo,
-    dates: `${formatoLocal(inicio)}/${formatoLocal(fim)}`,
-    details: detalhes,
-    ctz: fuso,
-    reminders: "on",
-    crm: "ALERT",
-    r: "-PT30M"
-  });
-
+  const params = new URLSearchParams({action:"TEMPLATE",text:titulo,dates:`${formatoLocal(inicio)}/${formatoLocal(fim)}`,details:detalhes,ctz:fuso});
   window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,"_blank","noopener,noreferrer");
 }
 
@@ -97,7 +84,8 @@ $("#consultar").onclick = consultar;
 
 $("#reservar").onclick = async ()=>{
   const nome = $("#nome").value.trim();
-  const telefone = normalizarTelefone($("#telefone").value);
+  const telefoneOriginal = $("#telefone").value.trim();
+  const telefone = normalizarTelefone(telefoneOriginal);
   const data = $("#data").value;
   const horario = $("#horario").value;
 
@@ -106,7 +94,6 @@ $("#reservar").onclick = async ()=>{
   if(!data || !horario || horario.includes("Nenhum")){ alert("Escolha data e horário."); return; }
 
   const servicoTexto = $("#servico").selectedOptions[0]?.textContent || "Sessão";
-
   const existentes = await getDocs(query(collection(db,"agendamentos"),where("data","==",data),where("horario","==",horario)));
   if(existentes.docs.some(d=>["pendente","confirmado"].includes(d.data().status))){
     alert("Este horário acabou de ser reservado. Escolha outro.");
@@ -114,19 +101,21 @@ $("#reservar").onclick = async ()=>{
     return;
   }
 
-  await addDoc(collection(db,"agendamentos"),{
-    nome, telefone,
-    servicoId: $("#servico").value,
-    servico: servicoTexto,
-    data, horario,
-    status:"pendente",
-    criadoEm:new Date().toISOString()
-  });
-
+  await addDoc(collection(db,"agendamentos"),{nome,telefone,servicoId:$("#servico").value,servico:servicoTexto,data,horario,status:"pendente",criadoEm:new Date().toISOString()});
   if(navigator.vibrate) navigator.vibrate([100,80,100]);
 
   const dataFormatada = new Date(data + "T12:00:00").toLocaleDateString("pt-BR");
-  const mensagem = `☀️ *Novo agendamento — Joy Bronze*\n\n👤 Cliente: ${nome}\n📱 Telefone: ${$("#telefone").value}\n💆 Serviço: ${servicoTexto}\n📅 Data: ${dataFormatada}\n🕐 Horário: ${horario}\n\n✅ Reserva realizada pelo site.`;
+  const mensagem = [
+    "☀️ NOVO AGENDAMENTO - JOY BRONZE",
+    "",
+    `👤 Cliente: ${nome}`,
+    `📱 Telefone: ${telefoneOriginal}`,
+    `💆 Serviço: ${servicoTexto}`,
+    `📅 Data: ${dataFormatada}`,
+    `🕐 Horário: ${horario}`,
+    "",
+    "✅ Reserva realizada pelo site."
+  ].join("\n");
   const whatsappUrl = `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(mensagem)}`;
 
   const adicionarAgenda = confirm(`Reserva realizada com sucesso! ☀️\n\nDeseja adicionar este agendamento à agenda do seu celular?\n\nSim, adicionar → abre o calendário com os dados preenchidos.\nAgora não → segue normalmente.\n\nO lembrete será de 30 minutos antes quando o calendário oferecer esse suporte.`);
@@ -134,7 +123,7 @@ $("#reservar").onclick = async ()=>{
 
   alert("Reserva realizada com sucesso! ☀️\n\nAbrindo o WhatsApp para enviar a confirmação.");
   window.open(whatsappUrl,"_blank","noopener,noreferrer");
-  $("#consultaTelefone").value = $("#telefone").value;
+  $("#consultaTelefone").value = telefoneOriginal;
   consultar();
   carregarHorarios();
 };
