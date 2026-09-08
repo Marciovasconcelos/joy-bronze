@@ -1,0 +1,11 @@
+{
+  "name": "Joy Bronze — Agendamento",
+  "short_name": "Joy Bronze",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1b120d",
+  "theme_color": "#8b5e34",
+  "description": "Agendamento da Joy Bronze",
+  "icons": []
+}
