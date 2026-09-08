@@ -48,20 +48,6 @@ async function carregarHorarios(){
     : "<option>Nenhum horário disponível</option>";
 }
 
-function abrirCalendario({nome,servicoTexto,data,horario}){
-  const [ano,mes,dia] = data.split("-").map(Number);
-  const [hora,minuto] = horario.split(":").map(Number);
-  const inicio = new Date(ano, mes-1, dia, hora, minuto);
-  const fim = new Date(inicio.getTime() + 60 * 60 * 1000);
-  const pad = n => String(n).padStart(2,"0");
-  const formatoLocal = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-  const titulo = `Joy Bronze - ${servicoTexto.replace(/\s+—\s+R\$.*$/i,"")}`;
-  const detalhes = `Cliente: ${nome}\nServiço: ${servicoTexto}\nJoy Bronze`;
-  const fuso = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Sao_Paulo";
-  const params = new URLSearchParams({action:"TEMPLATE",text:titulo,dates:`${formatoLocal(inicio)}/${formatoLocal(fim)}`,details:detalhes,ctz:fuso});
-  window.open(`https://calendar.google.com/calendar/render?${params.toString()}`,"_blank","noopener,noreferrer");
-}
-
 async function consultar(){
   const telefone = normalizarTelefone($("#consultaTelefone").value);
   if(!telefone){ alert("Digite seu telefone."); return; }
@@ -106,22 +92,19 @@ $("#reservar").onclick = async ()=>{
 
   const dataFormatada = new Date(data + "T12:00:00").toLocaleDateString("pt-BR");
   const mensagem = [
-    "☀️ NOVO AGENDAMENTO - JOY BRONZE",
+    "NOVO AGENDAMENTO - JOY BRONZE",
     "",
-    `👤 Cliente: ${nome}`,
-    `📱 Telefone: ${telefoneOriginal}`,
-    `💆 Serviço: ${servicoTexto}`,
-    `📅 Data: ${dataFormatada}`,
-    `🕐 Horário: ${horario}`,
+    `Cliente: ${nome}`,
+    `Telefone: ${telefoneOriginal}`,
+    `Serviço: ${servicoTexto}`,
+    `Data: ${dataFormatada}`,
+    `Horário: ${horario}`,
     "",
-    "✅ Reserva realizada pelo site."
+    "Reserva realizada pelo site."
   ].join("\n");
   const whatsappUrl = `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(mensagem)}`;
 
-  const adicionarAgenda = confirm(`Reserva realizada com sucesso! ☀️\n\nDeseja adicionar este agendamento à agenda do seu celular?\n\nSim, adicionar → abre o calendário com os dados preenchidos.\nAgora não → segue normalmente.\n\nO lembrete será de 30 minutos antes quando o calendário oferecer esse suporte.`);
-  if(adicionarAgenda) abrirCalendario({nome,servicoTexto,data,horario});
-
-  alert("Reserva realizada com sucesso! ☀️\n\nAbrindo o WhatsApp para enviar a confirmação.");
+  alert("Reserva realizada com sucesso!\n\nAbrindo o WhatsApp para enviar a confirmação.");
   window.open(whatsappUrl,"_blank","noopener,noreferrer");
   $("#consultaTelefone").value = telefoneOriginal;
   consultar();
