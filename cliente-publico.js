@@ -3,6 +3,7 @@ import { collection, addDoc, getDocs, query, where, doc, getDoc, deleteDoc } fro
 
 const $ = s => document.querySelector(s);
 let config = { abertura:"09:00", fechamento:"18:00", intervalo:60 };
+const WHATSAPP_SALAO = "5519995044272";
 
 function normalizarTelefone(v){ return v.replace(/\D/g,""); }
 
@@ -96,7 +97,13 @@ $("#reservar").onclick = async ()=>{
   });
 
   if(navigator.vibrate) navigator.vibrate([100,80,100]);
-  alert("Reserva realizada com sucesso! ☀️🔔");
+
+  const dataFormatada = new Date(data + "T12:00:00").toLocaleDateString("pt-BR");
+  const mensagem = `☀️ *Novo agendamento — Joy Bronze*\n\n👤 Cliente: ${nome}\n📱 Telefone: ${$("#telefone").value}\n💆 Serviço: ${servicoTexto}\n📅 Data: ${dataFormatada}\n🕐 Horário: ${horario}\n\n✅ Reserva realizada pelo site.`;
+  const whatsappUrl = `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(mensagem)}`;
+
+  alert("Reserva realizada com sucesso! ☀️\n\nAbrindo o WhatsApp para enviar a confirmação.");
+  window.open(whatsappUrl,"_blank","noopener,noreferrer");
   $("#consultaTelefone").value = $("#telefone").value;
   consultar();
   carregarHorarios();
