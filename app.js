@@ -1,6 +1,23 @@
-import {auth,db} from "./firebase-config.js";
-import {signInWithEmailAndPassword,createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {doc,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {auth, db} from "./firebase-config.js";
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {doc, getDoc, setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const msg=document.querySelector("#msg");
-async function entrar(cadastrar=false){const email=document.querySelector("#email").value.trim(),password=document.querySelector("#password").value;if(!email||!password){msg.textContent="Preencha e-mail e senha.";return}try{let cred;if(cadastrar){cred=await createUserWithEmailAndPassword(auth,email,password);await setDoc(doc(db,"usuarios",cred.user.uid),{email,tipo:"cliente",nome:email.split("@")[0],criadoEm:new Date().toISOString()});location.href="cliente.html"}else{cred=await signInWithEmailAndPassword(auth,email,password);const perfil=await getDoc(doc(db,"usuarios",cred.user.uid));location.href=perfil.exists()&&perfil.data().tipo==="admin"?"admin.html":"cliente.html"}}catch(e){msg.textContent=e.message}}
-document.querySelector("#loginBtn").onclick=()=>entrar(false);document.querySelector("#registerBtn").onclick=()=>entrar(true);
+async function entrar(cadastrar=false){
+ const email=document.querySelector("#email").value.trim(), password=document.querySelector("#password").value;
+ if(!email||!password){msg.textContent="Preencha e-mail e senha.";return}
+ try{
+   let cred;
+   if(cadastrar){
+     cred=await createUserWithEmailAndPassword(auth,email,password);
+     await setDoc(doc(db,"usuarios",cred.user.uid),{email,tipo:"cliente",nome:email.split("@")[0],criadoEm:new Date().toISOString()});
+     location.href="cliente.html";
+   } else {
+     cred=await signInWithEmailAndPassword(auth,email,password);
+     const perfil=await getDoc(doc(db,"usuarios",cred.user.uid));
+     location.href=perfil.exists() && perfil.data().tipo==="admin" ? "admin.html":"cliente.html";
+   }
+ }catch(e){msg.textContent=e.message}
+}
+document.querySelector("#loginBtn").onclick=()=>entrar(false);
+document.querySelector("#registerBtn").onclick=()=>entrar(true);

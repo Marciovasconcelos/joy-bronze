@@ -1,1 +1,27 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Joy Bronze</title><link rel="stylesheet" href="style.css"></head><body><header><div>☀️ <b>Joy Bronze</b></div><button id="logout">Sair</button></header><main class="container"><section class="hero"><h1>Olá, <span id="nome">Cliente</span> 👋</h1><p>Reserve seu horário.</p></section><div class="grid"><section class="card"><h2>Nova reserva</h2><label>Serviço</label><select id="servico"></select><label>Data</label><input id="data" type="date"><label>Horário disponível</label><select id="horario"></select><button id="reservar">Confirmar reserva</button></section><section class="card"><h2>Meus agendamentos</h2><div id="lista">Carregando...</div></section></div><section class="card"><h2>🔔 Lembretes</h2><p>Ative as notificações para receber avisos.</p><button id="ativarNotif">Ativar notificações</button></section></main><script type="module" src="cliente.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minhas Reservas</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div>☀️ <b>Bronze Agenda</b></div><button id="logout">Sair</button></header>
+<main class="container">
+<section class="hero"><h1>Olá, <span id="nome">Cliente</span> 👋</h1><p>Reserve seu horário de forma rápida.</p></section>
+<div class="grid">
+<section class="card">
+<h2>Nova reserva</h2>
+<label>Serviço</label><select id="servico"></select>
+<label>Data</label><input id="data" type="date">
+<label>Horário disponível</label><select id="horario"></select>
+<button id="reservar">Confirmar reserva</button>
+</section>
+<section class="card">
+<h2>Meus agendamentos</h2><div id="lista">Carregando...</div>
+</section>
+</div>
+<section class="card">
+<h2>🔔 Lembretes</h2>
+<p>Ative as notificações para receber avisos do seu agendamento.</p>
+<button id="ativarNotif">Ativar notificações</button>
+</section>
+</main>
+<script type="module" src="firebase-config.js"></script><script type="module" src="cliente.js"></script>
+</body></html>
