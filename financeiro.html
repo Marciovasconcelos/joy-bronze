@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Joy Bronze — Financeiro</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div>☀️ <b>Joy Bronze — Financeiro</b></div><div><a class="admin-link" href="admin.html">📅 Agenda</a> <a class="admin-link" href="servicos.html">💆 Serviços</a> <a class="admin-link" href="configuracoes.html">⚙️ Configurações</a> <button id="logout">Sair</button></div></header>
+<main class="container">
+<section class="hero"><h1>💰 Controle financeiro</h1><p>Acompanhe receitas, despesas e resultado do salão.</p></section>
+<section class="grid">
+<div class="card"><h2>📊 Resumo</h2><label>Mês de referência</label><input id="mes" type="month"><div class="finance-summary">
+<div class="finance-box"><span>Receitas</span><strong id="receitas">R$ 0,00</strong></div>
+<div class="finance-box"><span>Despesas</span><strong id="despesas">R$ 0,00</strong></div>
+<div class="finance-box"><span>Resultado</span><strong id="resultado">R$ 0,00</strong></div>
+<div class="finance-box"><span>Atendimentos concluídos</span><strong id="atendimentos">0</strong></div>
+</div></div>
+<div class="card"><h2>➕ Nova despesa</h2><label>Descrição</label><input id="descricao" placeholder="Ex.: Produtos, aluguel, energia...">
+<label>Valor</label><input id="valor" type="number" min="0" step="0.01" placeholder="0,00">
+<label>Data</label><input id="dataDespesa" type="date">
+<button id="addDespesa">Lançar despesa</button><p id="msg"></p></div>
+</section>
+<section class="card" style="margin-top:24px"><h2>🧾 Despesas lançadas</h2><div id="listaDespesas">Carregando...</div></section>
+<section class="card" style="margin-top:24px"><h2>💵 Receitas por atendimento</h2><p class="muted">As receitas são calculadas automaticamente pelos agendamentos com status <b>concluido</b>, usando o preço do serviço cadastrado.</p><div id="listaReceitas">Carregando...</div></section>
+</main><script type="module" src="financeiro.js"></script></body></html>
