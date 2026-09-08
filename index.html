@@ -1,34 +1,13 @@
-<!doctype html>
-<html lang="pt-BR"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Joy Bronze</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css">
-</head><body>
-<header><div>☀️ <b>Joy Bronze</b></div><a class="admin-link" href="admin-login.html">🔐 Área Administrativa</a></header>
-<main class="container">
-<a class="whatsapp-profissional whatsapp-topo" href="https://wa.me/5519995044272" target="_blank" rel="noopener noreferrer" aria-label="Falar direto com a profissional no WhatsApp">
-  <span class="whatsapp-icon" aria-hidden="true">☏</span>
-  <span><strong>FALAR DIRETO COM A PROFISSIONAL</strong><small>WhatsApp — tire suas dúvidas agora</small></span>
-</a>
-<section class="hero"><h1>Agende seu bronze ☀️</h1><p>Escolha seu serviço, data e horário.</p></section>
-<div class="grid">
-<section class="card">
-<h2>Seus dados</h2>
-<label>Nome completo</label><input id="nome" placeholder="Digite seu nome">
-<label>Telefone</label><input id="telefone" inputmode="tel" placeholder="(00) 00000-0000">
-<h2>Nova reserva</h2>
-<label>Serviço</label><select id="servico"></select>
-<label>Data</label><input id="data" type="date">
-<label>Horário disponível</label><select id="horario"></select>
-<button id="reservar">Confirmar reserva</button>
-</section>
-<section class="card">
-<h2>Consultar reserva</h2>
-<p>Digite seu telefone para ver seus próximos horários.</p>
-<input id="consultaTelefone" inputmode="tel" placeholder="Seu telefone">
-<button id="consultar">Consultar</button>
-<div id="lista"></div>
-</section>
-</div>
-</main>
-<script type="module" src="cliente-publico.js"></script>
-</body></html>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Joy Bronze Concept</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css"></head><body>
+<div class="brand-banner" aria-label="Bronze Concept Joy"></div>
+<main class="client-page">
+  <div class="client-tools"><span class="hamburger">☰</span><a class="whatsapp-profissional" href="https://wa.me/5519995044272" target="_blank" rel="noopener noreferrer"><span class="whatsapp-icon">☏</span><span><strong>FALAR DIRETO COM A PROFISSIONAL</strong><small>ATENDIMENTO (19) 99504-4272</small></span></a><a class="calendar-shortcut" href="#agendar">▣</a></div>
+  <section class="client-title"><span class="big-icon">▣</span><div><h1>Agende seu horário</h1><p>Escolha o serviço, a data e o horário que preferir.</p></div></section>
+  <section id="agendar" class="booking-form">
+    <div class="booking-item"><label>✿ &nbsp; Serviço</label><select id="servico"></select></div>
+    <div class="data-row"><div class="booking-item"><label>▣ &nbsp; Data</label><input id="data" type="date"></div><div class="booking-item"><label>◷ &nbsp; Horário</label><select id="horario"></select></div></div>
+    <div class="data-row"><div class="booking-item"><label>♙ &nbsp; Nome completo</label><input id="nome" placeholder="Digite seu nome"></div><div class="booking-item"><label>☎ &nbsp; Telefone</label><input id="telefone" inputmode="tel" placeholder="(00) 00000-0000"></div></div>
+    <button id="reservar" class="confirm-button">▣ &nbsp; CONFIRMAR AGENDAMENTO</button>
+  </section>
+  <section class="consulta-card"><h2>Consultar reserva</h2><p>Digite seu telefone para ver seus próximos horários.</p><input id="consultaTelefone" inputmode="tel" placeholder="Seu telefone"><button id="consultar">Consultar agendamento</button><div id="lista"></div></section>
+</main><script type="module" src="cliente-publico.js"></script></body></html>
