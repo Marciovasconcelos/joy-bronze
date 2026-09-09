@@ -24,7 +24,13 @@
   </section>
   <section class="quick-panel"><h2>ϟ &nbsp; Ações rápidas</h2><a href="servicos.html">♧ <span>Adicionar novo serviço</span></a><a href="#">♙ <span>Cadastrar novo cliente</span></a><a href="#agenda">▣ <span>Ver agendamentos</span></a></section>
   <section id="agenda" class="admin-panel"><h2>📅 Agenda</h2>
-  <div class="admin-calendar" id="adminCalendario">
+  <div class="admin-date-control">
+    <label>📅 Data e hora</label>
+    <button type="button" id="adminDataTrigger" class="admin-date-trigger" aria-expanded="false">
+      <span id="adminDataResumo">Selecione a data</span><span>⌄</span>
+    </button>
+  </div>
+  <div class="admin-calendar" id="adminCalendario" hidden>
     <div class="calendar-head">
       <button type="button" id="adminMesAnterior" aria-label="Mês anterior">‹</button>
       <strong id="adminMesCalendario"></strong>
@@ -34,7 +40,7 @@
     <div id="adminDiasCalendario" class="calendar-days"></div>
     <div class="calendar-legend"><span><i class="legend-free"></i> Sem agendamento</span><span><i class="legend-booked"></i> Com agendamento</span></div>
   </div>
-  <label>Data selecionada</label><input id="filtroData" type="date">
+  <input id="filtroData" type="date" class="admin-date-native" aria-hidden="true" tabindex="-1">
   <div id="listaAgenda">Carregando...</div>
 </section>
   <section class="admin-panel"><h2>✅ Atendimentos realizados</h2><p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p><div id="realizados">Carregando...</div></section>
