@@ -6,6 +6,7 @@
   <nav class="admin-menu">
     <a class="active" href="admin.html"><span>⌂</span> Início</a>
     <a href="#agenda"><span>▣</span> Agendamentos</a>
+    <a href="#realizadosPagina"><span>✓</span> Atendimentos realizados</a>
     <a href="servicos.html"><span>☷</span> Serviços</a>
     <a href="#"><span>♙</span> Clientes</a>
     <a href="financeiro.html"><span>↗</span> Relatórios</a>
@@ -43,7 +44,11 @@
   <input id="filtroData" type="date" class="admin-date-native" aria-hidden="true" tabindex="-1">
   <div id="listaAgenda">Carregando...</div>
 </section>
-  <section class="admin-panel"><h2>✅ Atendimentos realizados</h2><p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p><div id="realizados">Carregando...</div></section>
+  <section id="realizadosPagina" class="admin-panel realizados-page">
+    <h2>✅ Atendimentos realizados</h2>
+    <p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p>
+    <div id="realizados">Carregando...</div>
+  </section>
   <div class="admin-footer"><span></span><em>Beleza, bem-estar e autoestima<br>em cada detalhe!</em><span></span></div><span id="dataAtual" hidden></span>
 </main></div>
 <script type="module" src="admin.js"></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw-admin.js").catch(()=>{});}</script></body></html>
