@@ -29,3 +29,40 @@
   font-size: 9px !important;
   line-height: 1 !important;
 }
+/* Cabeçalho usando a imagem logo-joy.png */
+
+.brand-banner{
+  width:100%!important;
+  height:clamp(170px,23vw,340px)!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+
+  display:block!important;
+
+  background-color:#f5f0e8!important;
+  background-image:url("./logo-joy.png")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:cover!important;
+
+  overflow:hidden!important;
+  border-bottom:1px solid #dccfbd!important;
+}
+
+/* Esconde o logo antigo feito com texto */
+.brand-banner .joy-logo{
+  display:none!important;
+}
+
+.brand-banner::after{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  .brand-banner{
+    height:150px!important;
+    background-size:cover!important;
+    background-position:center center!important;
+  }
+}
