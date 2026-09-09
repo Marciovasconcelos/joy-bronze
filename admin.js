@@ -122,10 +122,10 @@ function renderAgenda(){
   const ativos=lista.filter(a=>a.status!=="concluido"&&a.status!=="cancelado");
   const realizados=lista.filter(a=>a.status==="concluido");
   const totalHojeEl=$("#agendamentosHoje");
-  if(totalHojeEl) totalHojeEl.textContent=lista.filter(a=>normalizarDataAgendamento(a.data)===dataHoje()&&a.status!=="cancelado").length;
+  if(totalHojeEl) totalHojeEl.textContent=todosAgendamentos.filter(a=>normalizarDataAgendamento(a.data)===dataHoje()&&a.status!=="cancelado").length;
   renderCalendarioAdmin();
 
-  $("#agenda").innerHTML=ativos.length
+  $("#listaAgenda").innerHTML=ativos.length
     ? ativos.map(cardAgendamento).join("")
     : "Nenhum agendamento pendente ou confirmado para esta data.";
   $("#realizados").innerHTML=realizados.length
@@ -152,7 +152,7 @@ async function agenda(){
     renderAgenda();
   }catch(e){
     console.error("Erro ao carregar agendamentos:",e);
-    $("#agenda").textContent="Não foi possível carregar os agendamentos. Verifique a conexão e as permissões do Firebase.";
+    $("#listaAgenda").textContent="Não foi possível carregar os agendamentos. Verifique a conexão e as permissões do Firebase.";
   }
 }
 
