@@ -103,7 +103,17 @@
   .calendar-legend{gap:10px;font-size:10px}
 }
 
-/* Administração com a mesma paleta visual do aplicativo do cliente */
+/* Administração: manter o fundo do Início igual às páginas Serviços e Relatórios */
+.admin-content,
+.admin-main,
+.admin-page,
+#view-inicio,
+#view-servicos,
+#view-relatorios{
+  background:#f7f4ee!important;
+}
+
+/* Paleta bronze do painel */
 .admin-sidebar{
   background:linear-gradient(180deg,#5a3218 0%,#3a1d0d 100%)!important;
 }
