@@ -228,3 +228,55 @@
   .appointment-actions{display:grid;grid-template-columns:1fr 1fr}
   .status-concluir{grid-column:1/-1}
 }
+/* CORREÇÃO: impedir rolagem lateral no app cliente */
+
+html,
+body{
+  width:100% !important;
+  max-width:100% !important;
+  overflow-x:hidden !important;
+  overflow-x:clip !important;
+  margin:0 !important;
+}
+
+.client-page{
+  width:100% !important;
+  max-width:760px !important;
+  min-width:0 !important;
+
+  margin-left:auto !important;
+  margin-right:auto !important;
+
+  overflow-x:hidden !important;
+}
+
+.client-page *,
+.booking-form,
+.booking-item,
+.consulta-card,
+.client-footer{
+  max-width:100%;
+}
+
+@media(max-width:760px){
+
+  .client-page{
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 !important;
+  }
+
+  .booking-form,
+  .client-title,
+  .client-tools,
+  .consulta-card,
+  .client-footer{
+    min-width:0 !important;
+  }
+
+  .booking-item{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+}
