@@ -21,17 +21,3 @@
 .stat-card i,.admin-footer span{color:#c89b48!important;background-color:#c89b48!important}
 .quick-panel>a{background:linear-gradient(90deg,#d0a95c,#b78334)!important}
 .admin-footer em{color:#8a6428!important}
-
-
-/* Toque rosé elegante combinado ao dourado */
-:root{--rose:#c9958d;--rose-light:#ead1cc;--rose-pale:#fbf4f2;--rose-deep:#9b625c}
-.client-page{background:linear-gradient(135deg,#fcfaf7 0%,#faf2f0 52%,#f7efe6 100%)!important}
-.client-tools{background:linear-gradient(90deg,#fffaf7,#f9eeeb)!important;border-bottom-color:#ead2cc!important}
-.booking-item,.consulta-card,.quick-panel,.admin-panel{background:linear-gradient(135deg,#fffdf9,#fdf6f4)!important;border-color:#e6c8c1!important}
-.confirm-button{background:linear-gradient(100deg,#c9958d,#b97c73)!important}
-.booking-item .field-icon,.booking-item>b,.hamburger,.calendar-shortcut{color:#a96f68!important}
-.client-footer{background:linear-gradient(120deg,#8c6255,#bd8a82 48%,#7d5549)!important}
-.admin-sidebar{background:linear-gradient(180deg,#c9958d,#94635c)!important}
-.stat-card,.admin-welcome{background:linear-gradient(135deg,#fffdf9,#faefec)!important;border-color:#e6c8c1!important}
-.quick-panel>a{background:linear-gradient(90deg,#c9958d,#ad7068)!important}
-.admin-footer em{color:#9b625c!important}
