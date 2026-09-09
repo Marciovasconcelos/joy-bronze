@@ -358,6 +358,204 @@ function fecharListaServicos() {
 
 function renderListaServicos() {
 
+  const select = $("#servico");
+  const lista = $("#servicoLista");
+  const resumo = $("#servicoResumo");
+
+  if (!select || !lista || !resumo) return;
+
+  const selecionados =
+    obterServicosSelecionados();
+
+  resumo.textContent =
+    selecionados.length === 0
+      ? "Escolha um ou mais procedimentos"
+      : selecionados.length === 1
+        ? selecionados[0].nome
+        : `${selecionados.length} procedimentos selecionados`;
+
+
+  /* ==========================================
+     SEPARAR POR CATEGORIA
+  ========================================== */
+
+  const avulsos =
+    dadosServicos.filter(
+      servico =>
+        servico.categoria !== "pacote"
+    );
+
+  const pacotes =
+    dadosServicos.filter(
+      servico =>
+        servico.categoria === "pacote"
+    );
+
+
+  function criarServico(servico) {
+
+    const ativo =
+      servicosSelecionados.has(
+        servico.id
+      );
+
+    return `
+      <button
+        type="button"
+        class="service-option ${
+          ativo
+            ? "is-selected"
+            : ""
+        }"
+        data-value="${servico.id}"
+      >
+
+        <span class="service-option-icon">
+          ✨
+        </span>
+
+        <span class="service-option-copy">
+
+          <strong>
+            ${servico.nome}
+          </strong>
+
+          <small>
+            ⏱️ ${duracaoServicoMinutos(
+              servico
+            )} minutos
+          </small>
+
+        </span>
+
+        <span class="service-price">
+
+          R$ ${Number(
+            servico.preco || 0
+          ).toFixed(2)}
+
+        </span>
+
+        <span class="service-check">
+
+          ${ativo ? "✓" : ""}
+
+        </span>
+
+      </button>
+    `;
+
+  }
+
+
+  let html = "";
+
+
+  /* ==========================================
+     SERVIÇOS AVULSOS
+  ========================================== */
+
+  if (avulsos.length) {
+
+    html += `
+      <div class="service-category-title">
+        💅 SERVIÇOS AVULSOS
+      </div>
+    `;
+
+    html +=
+      avulsos
+        .map(
+          criarServico
+        )
+        .join("");
+
+  }
+
+
+  /* ==========================================
+     PACOTES E COMBOS
+  ========================================== */
+
+  if (pacotes.length) {
+
+    html += `
+      <div class="service-category-title">
+        🎁 PACOTES E COMBOS
+      </div>
+    `;
+
+    html +=
+      pacotes
+        .map(
+          criarServico
+        )
+        .join("");
+
+  }
+
+
+  lista.innerHTML =
+    html;
+
+
+  /* ==========================================
+     CLIQUE PARA SELECIONAR
+  ========================================== */
+
+  lista
+    .querySelectorAll(
+      ".service-option"
+    )
+    .forEach(
+      btn => {
+
+        btn.onclick = () => {
+
+          const id =
+            btn.dataset.value;
+
+          if (
+            servicosSelecionados.has(
+              id
+            )
+          ) {
+
+            servicosSelecionados.delete(
+              id
+            );
+
+          } else {
+
+            servicosSelecionados.add(
+              id
+            );
+
+          }
+
+
+          const primeiro =
+            obterServicosSelecionados()[0];
+
+          if (primeiro) {
+
+            select.value =
+              primeiro.id;
+
+          }
+
+
+          renderListaServicos();
+
+          atualizarResumoAgendamento();
+
+        };
+
+      }
+    );
+
+}
+
   const select =
     $("#servico");
 
@@ -588,14 +786,19 @@ async function carregarServicos() {
             dados.preco || 0
           ),
 
-        duracaoMinutos:
-          Number(
-            dados.duracaoMinutos ||
-            dados.duracao ||
-            0
-          )
+       duracaoMinutos:
+  Number(
+    dados.duracaoMinutos ||
+    dados.duracao ||
+    0
+  ),
 
-      });
+categoria:
+  dados.categoria === "pacote"
+    ? "pacote"
+    : "avulso"
+
+});
 
     });
 
