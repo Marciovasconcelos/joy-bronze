@@ -8,7 +8,18 @@
   <section class="client-title"><span class="big-icon">▣</span><div><h1>Agende seu horário</h1><p>Escolha o serviço, a data e o horário que preferir.</p></div></section>
 
   <section id="agendar" class="booking-form">
-    <div class="booking-item booking-service"><span class="field-icon">♧</span><div><label>Serviço</label><select id="servico"></select></div><b>›</b></div>
+    <div class="booking-item booking-service service-picker">
+      <span class="field-icon">♧</span>
+      <div class="service-picker-main">
+        <label>Serviço</label>
+        <button type="button" id="servicoTrigger" class="service-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span id="servicoResumo">Escolha o serviço</span><span class="service-chevron">⌄</span>
+        </button>
+        <select id="servico" class="service-native" aria-hidden="true" tabindex="-1"></select>
+      </div>
+      <b class="service-side-chevron">⌄</b>
+    </div>
+    <div id="servicoLista" class="service-list" hidden role="listbox" aria-label="Lista de serviços"></div>
     <div class="booking-item booking-date"><span class="field-icon">▣</span><div><label>Data</label><input id="data" type="date"></div><b>›</b></div>
     <div class="booking-item booking-time"><span class="field-icon">◷</span><div><label>Horário</label><select id="horario"></select></div><b>›</b></div>
     <div class="booking-item booking-data"><span class="field-icon">♙</span><div><label>Seus dados</label><input id="nome" placeholder="Digite seu nome"></div><b>›</b></div>
