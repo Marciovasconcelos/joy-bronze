@@ -1,31 +1,31 @@
 .brand-banner {
-  min-height: 0 !important;
-  height: auto !important;
-  padding: 8px 16px !important;
+  width: 100%;
+  min-height: 58px !important;
+  height: 58px !important;
+  padding: 6px 16px !important;
   margin: 0 !important;
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-start !important;
+  overflow: hidden !important;
 }
 
-.joy-logo {
+.brand-banner .joy-logo {
   margin: 0 !important;
   padding: 0 !important;
   line-height: 1 !important;
 }
 
-.joy-logo-main {
+.brand-banner .joy-logo-main {
   margin: 0 !important;
+  padding: 0 !important;
+  font-size: 22px !important;
   line-height: 1 !important;
 }
 
-.joy-logo-sub {
+.brand-banner .joy-logo-sub {
   margin: 2px 0 0 !important;
+  padding: 0 !important;
+  font-size: 9px !important;
   line-height: 1 !important;
-}
-
-.brand-banner,
-.joy-logo,
-.joy-logo-main,
-.joy-logo-sub {
-  box-sizing: border-box;
 }
