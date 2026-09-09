@@ -63,3 +63,42 @@
   .service-check{font-size:22px}
   .service-trigger{font-size:13px!important}
 }
+
+/* Calendário de seleção e visualização dos agendamentos */
+.date-picker{position:relative!important;z-index:19}
+.date-picker-main{position:relative;min-width:0}
+.date-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.date-trigger{width:100%!important;margin:0!important;padding:4px 40px 4px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#5d5a55!important;text-align:left!important;font:inherit!important;position:relative!important;cursor:pointer!important}
+.date-trigger:hover{transform:none!important;filter:none!important}
+.date-chevron{position:absolute;right:0;top:50%;transform:translateY(-55%);font-size:24px;color:#85551f}
+.date-side-chevron{display:none!important}
+.date-picker.is-open{border-color:#b8874d!important;box-shadow:0 8px 22px #6b45201f!important;border-bottom-left-radius:0!important;border-bottom-right-radius:0!important}
+.client-calendar{grid-column:1/-1;background:#fffdf9;border:1px solid #d7c6b2;border-radius:0 0 20px 20px;box-shadow:0 18px 40px rgba(76,53,31,.18);padding:14px 16px 12px;margin:-12px 0 2px;position:relative;z-index:28}
+.client-calendar[hidden]{display:none!important}
+.calendar-head{display:grid;grid-template-columns:46px 1fr 46px;align-items:center;text-align:center;margin-bottom:10px}
+.calendar-head strong{text-transform:capitalize;font-size:18px;color:#4b3627}
+.calendar-head button{width:40px!important;height:40px!important;padding:0!important;margin:0!important;border-radius:50%!important;border:1px solid #dfc9aa!important;background:#f8efe2!important;color:#85551f!important;font-size:28px!important;line-height:1!important;box-shadow:none!important}
+.calendar-head button:hover{transform:none!important;filter:none!important;background:#f0e1cc!important}
+.calendar-weekdays,.calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.calendar-weekdays{margin-bottom:5px}
+.calendar-weekdays span{text-align:center;font-size:11px;font-weight:800;color:#9b836a;padding:5px 0}
+.calendar-empty{min-height:48px}
+.calendar-day{position:relative!important;min-height:48px!important;padding:4px!important;margin:0!important;border:1px solid transparent!important;border-radius:12px!important;background:#fbf7f1!important;color:#4b3627!important;font-size:15px!important;font-weight:700!important;box-shadow:none!important}
+.calendar-day:hover:not(:disabled){transform:none!important;filter:none!important;border-color:#c99d65!important;background:#f4e6d3!important}
+.calendar-day.is-past{opacity:.32!important;cursor:not-allowed!important}
+.calendar-day.has-booking{border-color:#c49a62!important;background:#fff5e7!important}
+.calendar-day.has-booking:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#9a6229;left:50%;bottom:5px;transform:translateX(-50%)}
+.calendar-day small{position:absolute;right:4px;top:3px;min-width:15px;height:15px;border-radius:50%;background:#85551f;color:#fff!important;font-size:9px!important;display:flex;align-items:center;justify-content:center}
+.calendar-day.is-selected{background:linear-gradient(135deg,#7b4d21,#a7753d)!important;color:#fff8ef!important;border-color:#7b4d21!important}
+.calendar-day.is-selected:after{background:#fff3dc}
+.calendar-legend{display:flex;gap:18px;justify-content:center;border-top:1px solid #eee2d4;margin-top:10px;padding-top:10px;font-size:11px;color:#806b58}
+.calendar-legend span{display:flex;align-items:center;gap:6px}
+.calendar-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.legend-free{background:#f1e5d6;border:1px solid #d6b88f}.legend-booked{background:#9a6229}
+@media(max-width:760px){
+  .client-calendar{margin:-8px 20px 2px!important;padding:12px 10px 10px;border-radius:0 0 16px 16px}
+  .calendar-day{min-height:42px!important;font-size:13px!important}
+  .calendar-empty{min-height:42px}
+  .calendar-head strong{font-size:16px}
+  .calendar-legend{gap:10px;font-size:10px}
+}
