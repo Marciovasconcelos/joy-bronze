@@ -97,6 +97,94 @@ async function carregarServicos(){
   configurarListaServicos();
 }
 
+let calendarioAtual = new Date();
+let agendamentosCalendario = [];
+
+function dataLocalISO(ano, mes, dia){
+  return `${ano}-${String(mes+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
+}
+
+function hojeISO(){
+  const d=new Date();
+  return dataLocalISO(d.getFullYear(),d.getMonth(),d.getDate());
+}
+
+async function carregarAgendamentosCalendario(){
+  const s=await getDocs(collection(db,"agendamentos"));
+  agendamentosCalendario=s.docs.map(d=>d.data()).filter(a=>["pendente","confirmado"].includes(a.status));
+}
+
+function renderCalendarioCliente(){
+  const grid=$("#diasCalendario"), titulo=$("#mesCalendario");
+  if(!grid || !titulo) return;
+  const ano=calendarioAtual.getFullYear(), mes=calendarioAtual.getMonth();
+  titulo.textContent=new Intl.DateTimeFormat("pt-BR",{month:"long",year:"numeric"}).format(new Date(ano,mes,1));
+  const primeiro=new Date(ano,mes,1).getDay();
+  const ultimo=new Date(ano,mes+1,0).getDate();
+  const min=hojeISO();
+  const selecionada=$("#data")?.value||"";
+  const ocupados={};
+  agendamentosCalendario.forEach(a=>{
+    if(a.data?.startsWith(`${ano}-${String(mes+1).padStart(2,"0")}`)) ocupados[a.data]=(ocupados[a.data]||0)+1;
+  });
+  let html="";
+  for(let i=0;i<primeiro;i++) html+='<span class="calendar-empty"></span>';
+  for(let dia=1;dia<=ultimo;dia++){
+    const iso=dataLocalISO(ano,mes,dia);
+    const passado=iso<min;
+    const qtd=ocupados[iso]||0;
+    html+=`<button type="button" class="calendar-day ${passado?"is-past":""} ${qtd?"has-booking":""} ${selecionada===iso?"is-selected":""}" data-date="${iso}" ${passado?"disabled":""}>
+      <span>${dia}</span>${qtd?`<small>${qtd}</small>`:""}
+    </button>`;
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll(".calendar-day:not(:disabled)").forEach(b=>b.onclick=async()=>{
+    const iso=b.dataset.date;
+    $("#data").value=iso;
+    $("#dataResumo").textContent=new Date(iso+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+    fecharCalendario();
+    renderCalendarioCliente();
+    await carregarHorarios();
+  });
+}
+
+function fecharCalendario(){
+  const cal=$("#calendarioCliente"), trigger=$("#dataTrigger");
+  if(!cal) return;
+  cal.hidden=true;
+  trigger?.setAttribute("aria-expanded","false");
+  document.querySelector(".date-picker")?.classList.remove("is-open");
+}
+
+function configurarCalendarioCliente(){
+  const trigger=$("#dataTrigger"), cal=$("#calendarioCliente");
+  trigger.onclick=async(e)=>{
+    e.stopPropagation();
+    const abrir=cal.hidden;
+    if(abrir){
+      await carregarAgendamentosCalendario();
+      const selecionada=$("#data").value;
+      if(selecionada){
+        const [a,m]=selecionada.split("-").map(Number);
+        calendarioAtual=new Date(a,m-1,1);
+      }
+      renderCalendarioCliente();
+    }
+    cal.hidden=!abrir;
+    trigger.setAttribute("aria-expanded",String(abrir));
+    document.querySelector(".date-picker")?.classList.toggle("is-open",abrir);
+  };
+  $("#mesAnterior").onclick=()=>{
+    const hoje=new Date(); hoje.setDate(1);
+    const teste=new Date(calendarioAtual.getFullYear(),calendarioAtual.getMonth()-1,1);
+    if(teste>=new Date(hoje.getFullYear(),hoje.getMonth(),1)){calendarioAtual=teste;renderCalendarioCliente();}
+  };
+  $("#proximoMes").onclick=()=>{calendarioAtual=new Date(calendarioAtual.getFullYear(),calendarioAtual.getMonth()+1,1);renderCalendarioCliente();};
+  document.addEventListener("click",e=>{
+    if(!e.target.closest(".date-picker")&&!e.target.closest("#calendarioCliente")) fecharCalendario();
+  });
+}
+
 async function carregarHorarios(){
   $("#horario").innerHTML = "<option>Carregando...</option>";
   const data = $("#data").value;
@@ -127,8 +215,12 @@ async function consultar(){
   });
 }
 
-$("#data").min = new Date().toISOString().slice(0,10);
-$("#data").onchange = carregarHorarios;
+$("#data").min = hojeISO();
+$("#data").onchange = async ()=>{
+  const v=$("#data").value;
+  if(v) $("#dataResumo").textContent=new Date(v+"T12:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  await carregarHorarios();
+};
 $("#consultar").onclick = consultar;
 
 $("#reservar").onclick = async ()=>{
@@ -176,3 +268,4 @@ $("#reservar").onclick = async ()=>{
 
 await carregarConfig();
 await carregarServicos();
+configurarCalendarioCliente();
