@@ -55,6 +55,49 @@ function normalizarDataAgendamento(v){
 
 let todosAgendamentos=[];
 let agendaListenerAtivo=false;
+let adminCalendarioAtual=new Date();
+
+function renderCalendarioAdmin(){
+  const grid=$("#adminDiasCalendario"), titulo=$("#adminMesCalendario");
+  if(!grid || !titulo) return;
+  const ano=adminCalendarioAtual.getFullYear(), mes=adminCalendarioAtual.getMonth();
+  titulo.textContent=new Intl.DateTimeFormat("pt-BR",{month:"long",year:"numeric"}).format(new Date(ano,mes,1));
+  const primeiro=new Date(ano,mes,1).getDay();
+  const ultimo=new Date(ano,mes+1,0).getDate();
+  const selecionada=$("#filtroData")?.value||"";
+  const contagem={};
+  todosAgendamentos.forEach(a=>{
+    if(a.status==="cancelado") return;
+    const d=normalizarDataAgendamento(a.data);
+    if(d) contagem[d]=(contagem[d]||0)+1;
+  });
+  let html="";
+  for(let i=0;i<primeiro;i++) html+='<span class="calendar-empty"></span>';
+  for(let dia=1;dia<=ultimo;dia++){
+    const iso=`${ano}-${String(mes+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
+    const qtd=contagem[iso]||0;
+    html+=`<button type="button" class="calendar-day ${qtd?"has-booking":""} ${selecionada===iso?"is-selected":""}" data-admin-date="${iso}">
+      <span>${dia}</span>${qtd?`<small>${qtd}</small>`:""}
+    </button>`;
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll("[data-admin-date]").forEach(btn=>btn.onclick=()=>{
+    $("#filtroData").value=btn.dataset.adminDate;
+    renderCalendarioAdmin();
+    renderAgenda();
+  });
+}
+
+function configurarCalendarioAdmin(){
+  $("#adminMesAnterior").onclick=()=>{
+    adminCalendarioAtual=new Date(adminCalendarioAtual.getFullYear(),adminCalendarioAtual.getMonth()-1,1);
+    renderCalendarioAdmin();
+  };
+  $("#adminProximoMes").onclick=()=>{
+    adminCalendarioAtual=new Date(adminCalendarioAtual.getFullYear(),adminCalendarioAtual.getMonth()+1,1);
+    renderCalendarioAdmin();
+  };
+}
 
 function renderAgenda(){
   const data=$("#filtroData").value||dataHoje();
@@ -65,7 +108,8 @@ function renderAgenda(){
   const ativos=lista.filter(a=>a.status!=="concluido"&&a.status!=="cancelado");
   const realizados=lista.filter(a=>a.status==="concluido");
   const totalHojeEl=$("#agendamentosHoje");
-  if(totalHojeEl) totalHojeEl.textContent=lista.filter(a=>a.status!=="cancelado").length;
+  if(totalHojeEl) totalHojeEl.textContent=lista.filter(a=>normalizarDataAgendamento(a.data)===dataHoje()&&a.status!=="cancelado").length;
+  renderCalendarioAdmin();
 
   $("#agenda").innerHTML=ativos.length
     ? ativos.map(cardAgendamento).join("")
@@ -110,5 +154,14 @@ function acompanharAgenda(){
   });
 }
 
-$("#filtroData").value=dataHoje();$("#filtroData").onchange=renderAgenda;const logoutBtn=$("#logout");if(logoutBtn) logoutBtn.onclick=()=>signOut(auth);relogio();setInterval(relogio,1000);
+$("#filtroData").value=dataHoje();
+configurarCalendarioAdmin();
+$("#filtroData").onchange=()=>{
+  const v=$("#filtroData").value;
+  if(v){
+    const [a,m]=v.split("-").map(Number);
+    adminCalendarioAtual=new Date(a,m-1,1);
+  }
+  renderAgenda();
+};const logoutBtn=$("#logout");if(logoutBtn) logoutBtn.onclick=()=>signOut(auth);relogio();setInterval(relogio,1000);
 onAuthStateChanged(auth,async u=>{if(!u){location.href="admin-login.html";return}const p=await getDoc(doc(db,"usuarios",u.uid));if(!p.exists()||p.data().tipo!=="admin"){location.href="index.html";return}agenda();acompanharAgenda();ativarNotificacoes(u)});
