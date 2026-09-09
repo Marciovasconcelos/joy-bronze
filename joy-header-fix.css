@@ -1,35 +1,26 @@
-/* LOGO JOY BRONZE - CLIENTE E ADMIN */
+/* CABEÇALHO COM LOGO OFICIAL */
 
 .brand-banner{
   width:100% !important;
-  height:85px !important;
-  min-height:85px !important;
-  max-height:85px !important;
-  margin:0 !important;
-  padding:6px 12px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  overflow:hidden !important;
-  background:#f5f0e8 !important;
-  background-image:none !important;
-}
+  height:auto !important;
+  min-height:0 !important;
+  aspect-ratio:3 / 1;
 
-/* CLIENTE: manter o logo original visível */
-.brand-banner .joy-logo{
-  display:block !important;
-}
+  background-image:url("./logo-joy.png") !important;
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
 
-.brand-banner .joy-logo-image{
-  display:block !important;
-  width:auto !important;
-  height:72px !important;
-  max-width:95% !important;
-  max-height:72px !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  margin:0 auto !important;
   padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+
+  border-bottom:1px solid #dccfbd !important;
+}
+
+/* Esconde o logo em texto, pois a imagem já possui o logo */
+.brand-banner .joy-logo{
+  display:none !important;
 }
 
 .brand-banner::after{
@@ -38,14 +29,7 @@
 
 @media(max-width:760px){
   .brand-banner{
-    height:72px !important;
-    min-height:72px !important;
-    max-height:72px !important;
-  }
-
-  .brand-banner .joy-logo-image{
-    height:62px !important;
-    max-height:62px !important;
-    max-width:96% !important;
+    aspect-ratio:3 / 1 !important;
+    min-height:125px !important;
   }
 }
