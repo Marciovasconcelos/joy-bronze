@@ -1,10 +1,9 @@
+
+```yaml
 name: Build Joy Bronze Administrador
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*.*.*'
 
 permissions:
   contents: write
@@ -12,6 +11,7 @@ permissions:
 jobs:
   build-windows:
     runs-on: windows-latest
+
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -28,3 +28,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run dist -- --publish always
+```
