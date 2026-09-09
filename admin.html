@@ -55,8 +55,8 @@
   <span>♙</span> Clientes
 </a>
 
-<a href="financeiro.html" id="linkRelatorios">
-  <span>↗</span> Relatórios 🔒
+<a href="financeiro.html">
+  <span>↗</span> Relatórios
 </a>
 
 <a href="configuracoes.html">
@@ -258,43 +258,7 @@ if ("serviceWorker" in navigator) {
     .catch(() => {});
 }
 </script>
-
-<!-- PROTEÇÃO DOS RELATÓRIOS -->
-
-<script>
-(function () {
-
-  const link = document.getElementById("linkRelatorios");
-
-  if (!link) return;
-
-  link.addEventListener("click", function (e) {
-
-    e.preventDefault();
-
-    const senha = prompt(
-      "🔒 Relatórios protegidos\n\nDigite a senha:"
-    );
-
-    if (senha === null) {
-      return;
-    }
-
-    if (senha === "1234") {
-
-      window.location.href = "financeiro.html";
-
-    } else {
-
-      alert("❌ Senha incorreta.");
-
-    }
-
-  });
-
-})();
-</script>
-
+  
 </body>
 </html>
 ```
