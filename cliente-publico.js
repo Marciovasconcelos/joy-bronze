@@ -19,7 +19,52 @@ let config = {
 };
 
 const WHATSAPP_SALAO = "5519996788649";
+/* ==========================================
+   MÚLTIPLOS PROCEDIMENTOS
+========================================== */
 
+const servicosSelecionados = new Set();
+const dadosServicos = [];
+
+function obterServicosSelecionados() {
+  return dadosServicos.filter(
+    s => servicosSelecionados.has(s.id)
+  );
+}
+
+function textoServicosSelecionados() {
+  return obterServicosSelecionados()
+    .map(s => s.nome)
+    .join(" + ");
+}
+
+function duracaoServicoMinutos(servico) {
+
+  const texto = String(
+    servico.nome || ""
+  );
+
+  const match = texto.match(
+    /(\d+)\s*MINUTOS?/i
+  );
+
+  if (match) {
+    return Number(match[1]);
+  }
+
+  return Number(config.intervalo || 60);
+}
+
+function duracaoTotalServicos() {
+
+  return obterServicosSelecionados()
+    .reduce(
+      (total, servico) =>
+        total + duracaoServicoMinutos(servico),
+      0
+    );
+
+}
 function normalizarTelefone(v) {
   return v.replace(/\D/g, "");
 }
@@ -117,81 +162,125 @@ function fecharListaServicos() {
 
 function renderListaServicos() {
 
-  const select = $("#servico");
-  const lista = $("#servicoLista");
-  const resumo = $("#servicoResumo");
+  const select =
+    $("#servico");
 
-  if (!select || !lista || !resumo) return;
+  const lista =
+    $("#servicoLista");
 
-  const atual = select.value;
+  const resumo =
+    $("#servicoResumo");
 
-  const options = [...select.options];
+  if (
+    !select ||
+    !lista ||
+    !resumo
+  ) return;
 
-  const selecionada =
-    options.find(o => o.value === atual) ||
-    options[0];
+  const selecionados =
+    obterServicosSelecionados();
 
   resumo.textContent =
-    selecionada?.textContent ||
-    "Escolha o serviço";
+    selecionados.length === 0
+      ? "Escolha um ou mais procedimentos"
+      : selecionados.length === 1
+        ? selecionados[0].nome
+        : `${selecionados.length} procedimentos selecionados`;
 
-  lista.innerHTML = options.map((o, i) => {
+  lista.innerHTML =
+    dadosServicos
+      .map(servico => {
 
-    const nome =
-      o.textContent.split(" — R$ ")[0];
+        const ativo =
+          servicosSelecionados.has(
+            servico.id
+          );
 
-    const preco =
-      (
-        o.textContent.match(
-          /R\$\s*([\d.,]+)/
-        ) || []
-      )[1] || "";
+        return `
+          <button
+            type="button"
+            class="service-option ${
+              ativo
+                ? "is-selected"
+                : ""
+            }"
+            data-value="${servico.id}"
+          >
 
-    const ativo =
-      o.value === select.value;
+            <span class="service-option-icon">
+              ♧
+            </span>
 
-    return `
-      <button
-        type="button"
-        class="service-option ${ativo ? "is-selected" : ""}"
-        role="option"
-        aria-selected="${ativo}"
-        data-value="${o.value}"
-        data-index="${i}"
-      >
-        <span class="service-option-icon">♧</span>
+            <span class="service-option-copy">
 
-        <span class="service-option-copy">
-          <strong>${nome}</strong>
-          <small>
-            ◷ ${duracaoDoServico(nome)}
-          </small>
-        </span>
+              <strong>
+                ${servico.nome}
+              </strong>
 
-        <span class="service-price">
-          R$ ${preco}
-        </span>
+              <small>
+                ◷ ${duracaoServicoMinutos(
+                  servico
+                )} minutos
+              </small>
 
-        <span class="service-check">
-          ${ativo ? "✓" : ""}
-        </span>
-      </button>
-    `;
+            </span>
 
-  }).join("");
+            <span class="service-price">
+              R$ ${Number(
+                servico.preco || 0
+              ).toFixed(2)}
+            </span>
+
+            <span class="service-check">
+              ${ativo ? "✓" : ""}
+            </span>
+
+          </button>
+        `;
+
+      })
+      .join("");
 
   lista
-    .querySelectorAll(".service-option")
+    .querySelectorAll(
+      ".service-option"
+    )
     .forEach(btn => {
 
       btn.onclick = () => {
 
-        select.value =
+        const id =
           btn.dataset.value;
 
-        renderListaServicos();
+        if (
+          servicosSelecionados.has(
+            id
+          )
+        ) {
 
-        fecharListaServicos();
+          servicosSelecionados.delete(
+            id
+          );
+
+        } else {
+
+          servicosSelecionados.add(
+            id
+          );
+
+        }
+
+        const primeiro =
+          obterServicosSelecionados()[0];
+
+        if (primeiro) {
+
+          select.value =
+            primeiro.id;
+
+        }
+
+        renderListaServicos();
 
       };
 
@@ -261,21 +350,42 @@ async function carregarServicos() {
   const select =
     $("#servico");
 
+  dadosServicos.length = 0;
+
+  s.docs
+    .filter(
+      d => d.data().ativo !== false
+    )
+    .forEach(d => {
+
+      const dados =
+        d.data();
+
+      dadosServicos.push({
+        id: d.id,
+        nome: dados.nome || "Procedimento",
+        preco: Number(
+          dados.preco || 0
+        )
+      });
+
+    });
+
   select.innerHTML =
-    s.empty
-      ? '<option value="">Nenhum serviço cadastrado</option>'
-      : s.docs
-        .filter(
-          d => d.data().ativo !== false
-        )
-        .map(d =>
-          `<option value="${d.id}">
-            ${d.data().nome} — R$ ${Number(
-              d.data().preco || 0
-            ).toFixed(2)}
-          </option>`
-        )
-        .join("");
+    dadosServicos.length
+      ? dadosServicos
+          .map(
+            servico =>
+              `<option value="${servico.id}">
+                ${servico.nome}
+              </option>`
+          )
+          .join("")
+      : `
+        <option value="">
+          Nenhum serviço cadastrado
+        </option>
+      `;
 
   renderListaServicos();
 
@@ -1009,11 +1119,24 @@ $("#reservar").onclick =
 
     }
 
-    const servicoTexto =
-      $("#servico")
-        .selectedOptions[0]
-        ?.textContent ||
-      "Sessão";
+   const servicos =
+  obterServicosSelecionados();
+
+if (!servicos.length) {
+
+  alert(
+    "Selecione pelo menos um procedimento."
+  );
+
+  return;
+
+}
+
+const servicoTexto =
+  textoServicosSelecionados();
+
+const duracaoTotal =
+  duracaoTotalServicos(); 
 
     const existentes =
       await getDocs(
@@ -1069,9 +1192,29 @@ $("#reservar").onclick =
         nome,
         telefone,
         servicoId:
-          $("#servico").value,
-        servico:
-          servicoTexto,
+  servicos[0].id,
+
+servicoIds:
+  servicos.map(
+    s => s.id
+  ),
+
+servicos:
+  servicos.map(
+    s => ({
+      id: s.id,
+      nome: s.nome,
+      preco: s.preco,
+      duracaoMinutos:
+        duracaoServicoMinutos(s)
+    })
+  ),
+
+servico:
+  servicoTexto,
+
+duracaoTotalMinutos:
+  duracaoTotal,
         data,
         horario,
         status:
