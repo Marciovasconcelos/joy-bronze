@@ -1,20 +1,16 @@
-/* CABEÇALHO COMPACTO - JOY BRONZE */
+/* LOGO JOY BRONZE - CLIENTE E ADMIN */
 
 .brand-banner{
   width:100% !important;
-  height:72px !important;
-  min-height:72px !important;
-  max-height:72px !important;
-
+  height:85px !important;
+  min-height:85px !important;
+  max-height:85px !important;
   margin:0 !important;
-  padding:5px 16px !important;
-
+  padding:6px 12px !important;
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
-
   overflow:hidden !important;
-
   background:#f5f0e8 !important;
   background-image:none !important;
 }
@@ -25,16 +21,13 @@
 
 .brand-banner .joy-logo-image{
   display:block !important;
-
   width:auto !important;
-  height:62px !important;
+  height:72px !important;
   max-width:95% !important;
-  max-height:62px !important;
-
+  max-height:72px !important;
   object-fit:contain !important;
   object-position:center !important;
-
-  margin:0 !important;
+  margin:0 auto !important;
   padding:0 !important;
 }
 
@@ -43,53 +36,15 @@
 }
 
 @media(max-width:760px){
-
   .brand-banner{
-    height:65px !important;
-    min-height:65px !important;
-    max-height:65px !important;
-    padding:4px 10px !important;
+    height:72px !important;
+    min-height:72px !important;
+    max-height:72px !important;
   }
 
   .brand-banner .joy-logo-image{
-    height:55px !important;
-    max-height:55px !important;
+    height:62px !important;
+    max-height:62px !important;
     max-width:96% !important;
-  }
-
-}
-/* LOGO OFICIAL - CLIENTE E ADMIN */
-.brand-banner{
-  width:100%;
-  min-height:110px !important;
-  height:110px !important;
-  padding:10px 16px !important;
-  margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  overflow:hidden !important;
-  background:#f5f0e8 !important;
-}
-
-.brand-banner .joy-logo-image{
-  display:block !important;
-  width:auto !important;
-  max-width:min(90%,500px) !important;
-  max-height:90px !important;
-  height:auto !important;
-  object-fit:contain !important;
-}
-
-@media(max-width:760px){
-  .brand-banner{
-    min-height:85px !important;
-    height:85px !important;
-    padding:8px 12px !important;
-  }
-
-  .brand-banner .joy-logo-image{
-    max-width:92% !important;
-    max-height:68px !important;
   }
 }
