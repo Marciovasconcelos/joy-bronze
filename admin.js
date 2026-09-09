@@ -99,12 +99,41 @@ function renderCalendarioAdmin(){
   grid.innerHTML=html;
   grid.querySelectorAll("[data-admin-date]").forEach(btn=>btn.onclick=()=>{
     $("#filtroData").value=btn.dataset.adminDate;
+    atualizarResumoDataAdmin();
+    fecharCalendarioAdmin();
     renderCalendarioAdmin();
     renderAgenda();
   });
 }
 
+function atualizarResumoDataAdmin(){
+  const v=$("#filtroData")?.value;
+  const resumo=$("#adminDataResumo");
+  if(!v||!resumo) return;
+  resumo.textContent=new Date(v+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+}
+function fecharCalendarioAdmin(){
+  const cal=$("#adminCalendario"), trigger=$("#adminDataTrigger");
+  if(cal) cal.hidden=true;
+  trigger?.setAttribute("aria-expanded","false");
+}
+function abrirCalendarioAdmin(){
+  const cal=$("#adminCalendario"), trigger=$("#adminDataTrigger");
+  if(!cal) return;
+  cal.hidden=false;
+  trigger?.setAttribute("aria-expanded","true");
+  renderCalendarioAdmin();
+}
 function configurarCalendarioAdmin(){
+  $("#adminDataTrigger").onclick=(e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const cal=$("#adminCalendario");
+    if(cal?.hidden) abrirCalendarioAdmin(); else fecharCalendarioAdmin();
+  };
+  document.addEventListener("click",e=>{
+    if(!e.target.closest(".admin-date-control")&&!e.target.closest("#adminCalendario")) fecharCalendarioAdmin();
+  });
   $("#adminMesAnterior").onclick=()=>{
     adminCalendarioAtual=new Date(adminCalendarioAtual.getFullYear(),adminCalendarioAtual.getMonth()-1,1);
     renderCalendarioAdmin();
@@ -179,6 +208,7 @@ function acompanharAgenda(){
 }
 
 $("#filtroData").value=dataHoje();
+atualizarResumoDataAdmin();
 configurarCalendarioAdmin();
 $("#filtroData").onchange=()=>{
   const v=$("#filtroData").value;
@@ -186,6 +216,7 @@ $("#filtroData").onchange=()=>{
     const [a,m]=v.split("-").map(Number);
     adminCalendarioAtual=new Date(a,m-1,1);
   }
+  atualizarResumoDataAdmin();
   renderAgenda();
 };const logoutBtn=$("#logout");if(logoutBtn) logoutBtn.onclick=()=>signOut(auth);relogio();setInterval(relogio,1000);
 onAuthStateChanged(auth,async u=>{if(!u){location.href="admin-login.html";return}const p=await getDoc(doc(db,"usuarios",u.uid));if(!p.exists()||p.data().tipo!=="admin"){location.href="index.html";return}agenda();acompanharAgenda();ativarNotificacoes(u)});
