@@ -20,40 +20,19 @@
     "appId": "com.joybronze.admin",
     "productName": "Joy Bronze - Administrador",
     "asar": true,
-    "files": [
-     "electron-main.cjs", 
-      "admin.html",
-      "admin.js",
-      "atendimentos-realizados.html",
-      "atendimentos-realizados.js",
-      "clientes.html",
-      "clientes.js",
-      "configuracoes.html",
-      "configuracoes.js",
-      "financeiro.html",
-      "financeiro.js",
-      "servicos.html",
-      "servicos.js",
-      "manual-agendamento.html",
-      "manual-agendamento.js",
-      "firebase-config.js",
-      "style.css",
-      "joy-bronze-concept.css",
-      "joy-header-fix.css",
-      "joy-layout-exato.css",
-      "manifest-admin.json",
-      "icon-admin.svg",
-      "sw-admin.js"
-    ],
+
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "Joy-Bronze-Administrador-Setup-${version}.${ext}"
     },
+
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
@@ -61,6 +40,7 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Joy Bronze - Administrador"
     },
+
     "publish": {
       "provider": "github",
       "owner": "Marciovasconcelos",
