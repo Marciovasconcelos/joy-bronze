@@ -43,12 +43,11 @@ function cardAgendamento(a){
     <b>🕐 ${escapeHtml(a.horario||"")}</b> — ${escapeHtml(a.nome||"Cliente")}<br>
     📱 ${escapeHtml(a.telefone||"")}<br>
     💆 ${escapeHtml(a.servico||"")}<br>
-    <select data-status="${a.id}">
-      <option value="pendente" ${a.status==="pendente"?"selected":""}>pendente</option>
-      <option value="confirmado" ${a.status==="confirmado"?"selected":""}>confirmado</option>
-      <option value="concluido" ${a.status==="concluido"?"selected":""}>concluído</option>
-      <option value="cancelado" ${a.status==="cancelado"?"selected":""}>cancelado</option>
-    </select>
+    <div class="appointment-actions">
+      <button type="button" class="status-btn status-confirmado ${a.status==="confirmado"?"is-current":""}" data-confirmar="${a.id}">✓ Confirmar</button>
+      <button type="button" class="status-btn status-cancelado ${a.status==="cancelado"?"is-current":""}" data-cancelar="${a.id}">✕ Cancelar</button>
+      <button type="button" class="status-btn status-concluir" data-concluir="${a.id}">✓ Concluir</button>
+    </div>
     <div id="pagamento-${a.id}" class="payment-popup" hidden>
       ${cardPagamento(a)}
     </div>
@@ -163,24 +162,28 @@ function renderAgenda(){
     ? realizados.map(cardRealizado).join("")
     : "Nenhum atendimento realizado nesta data.";
 
-  document.querySelectorAll("[data-status]").forEach(el=>el.onchange=async()=>{
-    const id=el.dataset.status;
-    const popup=$("#pagamento-"+id);
-    if(el.value==="concluido"){
-      /* Só abre o balão de pagamento. O atendimento ainda não é concluído. */
-      if(popup){
-        popup.hidden=false;
-        popup.classList.add("is-open");
-        popup.scrollIntoView({behavior:"smooth",block:"nearest"});
-      }
-      return;
-    }
-    if(popup){
-      popup.hidden=true;
-      popup.classList.remove("is-open");
-    }
-    await updateDoc(doc(db,"agendamentos",id),{status:el.value});
+  document.querySelectorAll("[data-confirmar]").forEach(btn=>btn.onclick=async()=>{
+    const id=btn.dataset.confirmar;
+    await updateDoc(doc(db,"agendamentos",id),{status:"confirmado"});
   });
+
+  document.querySelectorAll("[data-cancelar]").forEach(btn=>btn.onclick=async()=>{
+    const id=btn.dataset.cancelar;
+    if(!confirm("Deseja cancelar este agendamento? O horário será liberado novamente para novos clientes.")) return;
+    /* Status cancelado é ignorado na verificação de horários do cliente, liberando o horário. */
+    await updateDoc(doc(db,"agendamentos",id),{status:"cancelado",canceladoEm:new Date().toISOString()});
+  });
+
+  document.querySelectorAll("[data-concluir]").forEach(btn=>btn.onclick=()=>{
+    const id=btn.dataset.concluir;
+    const popup=$("#pagamento-"+id);
+    if(popup){
+      popup.hidden=false;
+      popup.classList.add("is-open");
+      popup.scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+  });
+
   document.querySelectorAll("[data-save-pagamento]").forEach(b=>b.onclick=()=>salvarPagamento(b.dataset.savePagamento));
 }
 
