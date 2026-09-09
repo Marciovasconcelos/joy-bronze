@@ -1,28 +1,47 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Joy Bronze — Administração</title><link rel="manifest" href="manifest-admin.json"><meta name="theme-color" content="#5b3316"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css"><link rel="stylesheet" href="joy-header-fix.css"><link rel="stylesheet" href="joy-layout-exato.css"></head><body>
-<div class="brand-banner" aria-label="Bronze Joy Concept"></div>
-<div class="admin-shell">
-<aside class="admin-sidebar">
-  <div class="admin-profile"><span class="avatar">⌂</span><div><b>Administrador</b><small>Painel Administrativo</small></div></div>
-  <nav class="admin-menu">
-    <a class="active" href="admin.html"><span>⌂</span> Início</a>
-    <a href="#agenda"><span>▣</span> Agendamentos</a>
-    <a href="servicos.html"><span>☷</span> Serviços</a>
-    <a href="#"><span>♙</span> Clientes</a>
-    <a href="financeiro.html"><span>↗</span> Relatórios</a>
-    <a href="configuracoes.html"><span>⚙</span> Configurações</a>
-    <button id="logout"><span>⇥</span> Sair</button>
-  </nav>
-</aside>
-<main class="admin-content">
-  <section class="admin-welcome"><span class="leaf">♧</span><div><h1>Bem-vindo(a), Administrador</h1><p>Gerencie seus agendamentos, serviços e clientes de forma prática e rápida.</p></div></section>
-  <section class="admin-stats">
-    <div class="stat-card"><span>▣</span><small>Agendamentos hoje</small><b id="horaAtual">00:00</b><i>›</i></div>
-    <div class="stat-card stat-delicada"><span>♙</span><b id="saudacao">Bom dia ☀️</b><i>›</i></div>
-    <div class="stat-card"><span>♧</span><small>Serviços cadastrados</small><b>13</b><i>›</i></div>
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Joy Bronze — Administração</title>
+<link rel="manifest" href="manifest-admin.json"><meta name="theme-color" content="#6b421f">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css"><link rel="stylesheet" href="joy-header-fix.css"><link rel="stylesheet" href="joy-layout-exato.css">
+</head><body class="admin-draft-body">
+<header class="draft-brand">
+  <div class="draft-side draft-left"></div>
+  <div class="draft-logo"><div class="draft-name">BRONZE <span>JOY</span></div><div class="draft-concept">CONCEPT</div></div>
+  <div class="draft-side draft-right"></div>
+</header>
+
+<main class="draft-admin">
+  <section class="draft-welcome">
+    <div class="line-icon person-icon">♙</div>
+    <div><h1>Bem-vindo(a), Administrador</h1><p>Gerencie seus agendamentos, serviços e clientes de forma prática e rápida.</p></div>
   </section>
-  <section class="quick-panel"><h2>ϟ &nbsp; Ações rápidas</h2><a href="servicos.html">♧ <span>Adicionar novo serviço</span></a><a href="#">♙ <span>Cadastrar novo cliente</span></a><a href="#agenda">▣ <span>Ver agendamentos</span></a></section>
+
+  <section class="draft-stats">
+    <div class="draft-card">
+      <div class="draft-card-icon">▣</div><div class="draft-card-text"><small>Agendamentos hoje</small><b id="horaAtual">23</b></div><i>›</i>
+    </div>
+    <div class="draft-card greeting-card">
+      <div class="draft-card-icon">♙</div><div class="draft-card-text"><b id="saudacao">Boa noite 🌙</b></div><i>›</i>
+    </div>
+    <div class="draft-card">
+      <div class="draft-card-icon">♧</div><div class="draft-card-text"><small>Serviços cadastrados</small><b>13</b></div><i>›</i>
+    </div>
+  </section>
+
+  <section class="draft-actions">
+    <h2><span>ϟ</span> Ações rápidas</h2>
+    <div class="draft-action-grid">
+      <a href="servicos.html"><span>♙</span> Adicionar novo serviço</a>
+      <a href="#"><span>♙</span> Cadastrar novo cliente</a>
+      <a href="#agenda"><span>▣</span> Ver agendamentos</a>
+    </div>
+  </section>
+
   <section id="agenda" class="admin-panel"><h2>📅 Agenda de hoje</h2><label>Filtrar por data</label><input id="filtroData" type="date"><div id="agenda">Carregando...</div></section>
-  <section class="admin-panel"><h2>✅ Atendimentos realizados</h2><p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p><div id="realizados">Carregando...</div></section>
+  <section class="admin-panel"><h2>✓ Atendimentos realizados</h2><p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p><div id="realizados">Carregando...</div></section>
   <div class="admin-footer"><span></span><em>Beleza, bem-estar e autoestima<br>em cada detalhe!</em><span></span></div><span id="dataAtual" hidden></span>
-</main></div>
-<script type="module" src="admin.js"></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw-admin.js").catch(()=>{});}</script></body></html>
+</main>
+<script type="module" src="admin.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw-admin.js").catch(()=>{});}</script>
+</body></html>
