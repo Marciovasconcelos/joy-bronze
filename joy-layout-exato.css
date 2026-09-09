@@ -209,3 +209,22 @@
 .admin-calendar[hidden]{display:none!important}
 .admin-calendar{margin-top:8px!important;animation:adminCalendarPop .18s ease-out}
 @keyframes adminCalendarPop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+
+/* Botões de status do agendamento */
+.appointment-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.status-btn{
+  border:0!important;border-radius:10px!important;padding:10px 14px!important;
+  min-height:42px!important;margin:0!important;font-weight:800!important;
+  box-shadow:none!important;cursor:pointer!important;
+}
+.status-btn:hover{transform:translateY(-1px)!important;filter:brightness(1.03)!important}
+.status-confirmado{background:#1f9d55!important;color:#fff!important}
+.status-confirmado.is-current{box-shadow:0 0 0 3px rgba(31,157,85,.16)!important}
+.status-cancelado{background:#c93b3b!important;color:#fff!important}
+.status-cancelado.is-current{box-shadow:0 0 0 3px rgba(201,59,59,.16)!important}
+.status-concluir{background:#85551f!important;color:#fff8ef!important}
+@media(max-width:760px){
+  .appointment-actions{display:grid;grid-template-columns:1fr 1fr}
+  .status-concluir{grid-column:1/-1}
+}
