@@ -1,6 +1,6 @@
 {
   "name": "joy-bronze-admin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Painel administrativo Joy Bronze",
   "main": "electron-main.cjs",
   "author": "Joy Bronze",
