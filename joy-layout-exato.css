@@ -102,3 +102,51 @@
   .calendar-head strong{font-size:16px}
   .calendar-legend{gap:10px;font-size:10px}
 }
+
+/* Administração com a mesma paleta visual do aplicativo do cliente */
+.admin-sidebar{
+  background:linear-gradient(180deg,#5a3218 0%,#3a1d0d 100%)!important;
+}
+.admin-menu a.active{
+  background:#f5eadc!important;
+  color:#5a3218!important;
+  box-shadow:0 6px 18px rgba(55,27,12,.18)!important;
+}
+.admin-menu a:hover,.admin-menu button:hover{
+  background:#f0e2cf!important;
+  color:#5a3218!important;
+}
+.admin-content{background:#f7f4ee!important}
+.admin-welcome,.stat-card,.quick-panel,.admin-panel{
+  background:#fffdf9!important;
+  border-color:#e1d2bf!important;
+}
+.admin-welcome h1,.admin-welcome p,.quick-panel h2,.admin-panel h2{color:#4b3627!important}
+.stat-card{box-shadow:0 8px 22px rgba(90,50,24,.08)!important}
+.stat-card span{color:#85551f!important}
+.stat-card small{color:#806b58!important}
+.stat-card b{color:#4b3627!important}
+.quick-panel>a{
+  background:linear-gradient(100deg,#7b4d21,#a7753d)!important;
+}
+.quick-panel>a:hover{background:linear-gradient(100deg,#6a3f1b,#96652f)!important}
+.admin-panel label{color:#806b58!important}
+.admin-panel input,.admin-panel select{
+  background:#fffaf4!important;
+  border-color:#d9c6ae!important;
+  color:#4b3627!important;
+}
+.appointment{
+  background:#fffaf4!important;
+  border-color:#e1d2bf!important;
+  color:#4b3627!important;
+  border-left:4px solid #a7753d!important;
+}
+.appointment select,.appointment input{
+  background:#fffdf9!important;
+}
+@media(max-width:760px){
+  .admin-content{background:#f7f4ee!important}
+  .admin-sidebar{background:linear-gradient(100deg,#5a3218,#3a1d0d)!important}
+  .admin-menu a.active{background:#f5eadc!important;color:#5a3218!important}
+}
