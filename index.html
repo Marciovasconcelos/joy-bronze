@@ -15,16 +15,7 @@
   </section>
   <section class="consulta-card"><h2>Consultar reserva</h2><p>Digite seu telefone para ver seus próximos horários.</p><input id="consultaTelefone" inputmode="tel" placeholder="Seu telefone"><button id="consultar">Consultar agendamento</button><div id="lista"></div></section>
   <footer class="client-footer"><div class="footer-top"><div class="footer-mark">BRONZE <small>CONCEPT</small> <b>JOY</b></div></div><div class="footer-grid"><div class="footer-message"><span class="footer-wa">☏</span><p>Tire suas dúvidas e reserve<br>seu horário pelo nosso WhatsApp.</p></div><div class="footer-contact"><span>◎</span><a href="https://instagram.com/joybronze.concept" target="_blank" rel="noopener noreferrer">@joybronze.concept</a></div><div class="footer-contact"><span>☏</span><a href="https://wa.me/5519996788649" target="_blank" rel="noopener noreferrer">(19) 99678-8649</a></div><div class="footer-address"><span>⌖</span><span>Rua Florêncio Domingues, 246<br>Centro - Pinhalzinho SP<br><small>CEP: 12995-039</small></span></div></div></footer>
-</main><script type="module" src="cliente-publico.js"></script><script>
+</main><script type="module" src="cliente-publico.js"></script><script type="module" src="clientes-auto.js"></script><script>
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
-// Tenta fullscreen na primeira interação. Navegadores podem exigir este gesto do usuário.
-(function(){
-  let tentou=false;
-  async function fullscreen(){
-    if(tentou || window.matchMedia("(display-mode: standalone)").matches) return;
-    tentou=true;
-    try{ if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen(); }catch(e){}
-  }
-  ["pointerdown","touchstart","click"].forEach(ev=>document.addEventListener(ev,fullscreen,{once:true,passive:true}));
-})();
+(function(){let tentou=false;async function fullscreen(){if(tentou||window.matchMedia("(display-mode: standalone)").matches)return;tentou=true;try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();}catch(e){}}["pointerdown","touchstart","click"].forEach(ev=>document.addEventListener(ev,fullscreen,{once:true,passive:true}));})();
 </script></body></html>
