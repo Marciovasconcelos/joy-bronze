@@ -29,7 +29,16 @@
 
 @media(max-width:760px){
   .brand-banner{
-    aspect-ratio:3 / 1 !important;
+    width:100% !important;
+    height:125px !important;
     min-height:125px !important;
+
+    aspect-ratio:auto !important;
+
+    background-size:contain !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+
+    background-color:#f7f4ee !important;
   }
 }
