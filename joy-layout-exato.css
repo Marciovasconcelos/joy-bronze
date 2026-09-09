@@ -160,3 +160,14 @@
   .admin-sidebar{background:linear-gradient(100deg,#5a3218,#3a1d0d)!important}
   .admin-menu a.active{background:#f5eadc!important;color:#5a3218!important}
 }
+
+/* Calendário completo no painel administrativo */
+.admin-calendar{margin:8px 0 18px;padding:14px;background:#fffaf4;border:1px solid #e1d2bf;border-radius:16px}
+.admin-calendar .calendar-head{margin-bottom:10px}
+.admin-calendar .calendar-day{cursor:pointer}
+.admin-calendar .calendar-day:hover{border-color:#c99d65!important;background:#f4e6d3!important}
+.admin-calendar .calendar-day.has-booking{box-shadow:inset 0 0 0 1px #c49a62!important}
+@media(max-width:760px){
+  .admin-calendar{padding:10px 6px}
+  .admin-calendar .calendar-day{min-height:40px!important}
+}
