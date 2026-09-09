@@ -171,3 +171,24 @@
   .admin-calendar{padding:10px 6px}
   .admin-calendar .calendar-day{min-height:40px!important}
 }
+
+/* Balão de pagamento: aparece somente ao concluir */
+.payment-popup[hidden]{display:none!important}
+.payment-popup.is-open{
+  display:block!important;
+  margin-top:12px;
+  padding:14px;
+  border:1px solid #d8bd98;
+  border-radius:16px;
+  background:#fffaf4;
+  box-shadow:0 10px 28px rgba(90,50,24,.14);
+  animation:paymentPop .2s ease-out;
+}
+@keyframes paymentPop{
+  from{opacity:0;transform:translateY(-6px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.payment-popup.is-open .payment-box,
+.payment-popup.is-open form{
+  margin:0!important;
+}
