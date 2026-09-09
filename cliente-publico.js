@@ -159,20 +159,34 @@ function fecharCalendario(){
 function configurarCalendarioCliente(){
   const trigger=$("#dataTrigger"), cal=$("#calendarioCliente");
   trigger.onclick=async(e)=>{
+    e.preventDefault();
     e.stopPropagation();
     const abrir=cal.hidden;
-    if(abrir){
-      await carregarAgendamentosCalendario();
-      const selecionada=$("#data").value;
-      if(selecionada){
-        const [a,m]=selecionada.split("-").map(Number);
-        calendarioAtual=new Date(a,m-1,1);
-      }
-      renderCalendarioCliente();
+
+    if(!abrir){
+      fecharCalendario();
+      return;
     }
-    cal.hidden=!abrir;
-    trigger.setAttribute("aria-expanded",String(abrir));
-    document.querySelector(".date-picker")?.classList.toggle("is-open",abrir);
+
+    /* Abre o calendário imediatamente, mesmo se a consulta dos agendamentos falhar */
+    const selecionada=$("#data")?.value;
+    if(selecionada){
+      const [a,m]=selecionada.split("-").map(Number);
+      calendarioAtual=new Date(a,m-1,1);
+    }
+
+    cal.hidden=false;
+    trigger.setAttribute("aria-expanded","true");
+    document.querySelector(".date-picker")?.classList.add("is-open");
+    renderCalendarioCliente();
+
+    try{
+      await carregarAgendamentosCalendario();
+      renderCalendarioCliente();
+    }catch(err){
+      console.warn("Não foi possível carregar os indicadores de agendamento no calendário:",err);
+      /* O calendário continua funcionando normalmente para selecionar a data */
+    }
   };
   $("#mesAnterior").onclick=()=>{
     const hoje=new Date(); hoje.setDate(1);
