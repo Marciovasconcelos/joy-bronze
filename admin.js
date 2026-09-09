@@ -49,7 +49,9 @@ function cardAgendamento(a){
       <option value="concluido" ${a.status==="concluido"?"selected":""}>concluído</option>
       <option value="cancelado" ${a.status==="cancelado"?"selected":""}>cancelado</option>
     </select>
-    ${podeReceberPagamento?cardPagamento(a):""}
+    <div id="pagamento-${a.id}" class="payment-popup" hidden>
+      ${cardPagamento(a)}
+    </div>
   </div>`
 }
 function cardRealizado(a){const forma={pix:"PIX",dinheiro:"Dinheiro",credito:"Cartão de crédito",debito:"Cartão de débito"}[a.formaPagamento]||"Não informado";return `<div class="appointment"><b>✅ ${escapeHtml(a.horario||"")}</b> — ${escapeHtml(a.nome||"Cliente")}<br>📱 ${escapeHtml(a.telefone||"")}<br>💆 ${escapeHtml(a.servico||"")}<br>💰 <b>R$ ${Number(a.valorPago??a.valor??0).toFixed(2).replace(".",",")}</b> · ${forma}</div>`}
@@ -134,13 +136,21 @@ function renderAgenda(){
 
   document.querySelectorAll("[data-status]").forEach(el=>el.onchange=async()=>{
     const id=el.dataset.status;
-    if(el.value==="confirmado"){
-      await updateDoc(doc(db,"agendamentos",id),{status:"confirmado"});
-    }else if(el.value==="concluido"){
-      alert("O pagamento precisa ser informado antes de concluir. Selecione Confirmado para abrir o pagamento.");
-    }else{
-      await updateDoc(doc(db,"agendamentos",id),{status:el.value});
+    const popup=$("#pagamento-"+id);
+    if(el.value==="concluido"){
+      /* Só abre o balão de pagamento. O atendimento ainda não é concluído. */
+      if(popup){
+        popup.hidden=false;
+        popup.classList.add("is-open");
+        popup.scrollIntoView({behavior:"smooth",block:"nearest"});
+      }
+      return;
     }
+    if(popup){
+      popup.hidden=true;
+      popup.classList.remove("is-open");
+    }
+    await updateDoc(doc(db,"agendamentos",id),{status:el.value});
   });
   document.querySelectorAll("[data-save-pagamento]").forEach(b=>b.onclick=()=>salvarPagamento(b.dataset.savePagamento));
 }
