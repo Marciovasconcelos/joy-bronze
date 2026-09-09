@@ -1,48 +1,60 @@
-.brand-banner{
-  width:100%!important;
-  height:110px!important;
-  min-height:110px!important;
-  margin:0!important;
-  padding:10px 16px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  overflow:hidden!important;
+/* CABEÇALHO COMPACTO - JOY BRONZE */
 
-  /* Não usar a logo como fundo */
-  background:#f5f0e8!important;
-  background-image:none!important;
+.brand-banner{
+  width:100% !important;
+  height:72px !important;
+  min-height:72px !important;
+  max-height:72px !important;
+
+  margin:0 !important;
+  padding:5px 16px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  overflow:hidden !important;
+
+  background:#f5f0e8 !important;
+  background-image:none !important;
 }
 
 .brand-banner .joy-logo{
-  display:none!important;
+  display:none !important;
 }
 
 .brand-banner .joy-logo-image{
-  display:block!important;
-  width:auto!important;
-  height:auto!important;
-  max-width:min(90%,500px)!important;
-  max-height:90px!important;
-  object-fit:contain!important;
-  object-position:center!important;
-  margin:0!important;
-  padding:0!important;
+  display:block !important;
+
+  width:auto !important;
+  height:62px !important;
+  max-width:95% !important;
+  max-height:62px !important;
+
+  object-fit:contain !important;
+  object-position:center !important;
+
+  margin:0 !important;
+  padding:0 !important;
 }
 
 .brand-banner::after{
-  display:none!important;
+  display:none !important;
 }
 
 @media(max-width:760px){
+
   .brand-banner{
-    height:85px!important;
-    min-height:85px!important;
-    padding:8px 12px!important;
+    height:65px !important;
+    min-height:65px !important;
+    max-height:65px !important;
+    padding:4px 10px !important;
   }
 
   .brand-banner .joy-logo-image{
-    max-width:92%!important;
-    max-height:68px!important;
+    height:55px !important;
+    max-height:55px !important;
+    max-width:96% !important;
   }
+
 }
