@@ -1,61 +1,30 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Joy Bronze Concept</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css"><link rel="stylesheet" href="joy-header-fix.css"><link rel="stylesheet" href="joy-layout-exato.css"></head><body>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#8a5a3b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.json"><title>Joy Bronze Concept</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="joy-bronze-concept.css"><link rel="stylesheet" href="joy-header-fix.css"><link rel="stylesheet" href="joy-layout-exato.css"></head><body>
 <div class="brand-banner" aria-label="Bronze Joy Concept"><div class="joy-logo"><div class="joy-logo-main">BRONZE <span>JOY</span></div><div class="joy-logo-sub">CONCEPT</div></div></div>
 <main class="client-page">
-  <div class="client-tools">
-    <a class="calendar-shortcut" href="#agendar">▣</a>
-  </div>
-
+  <div class="client-tools"><a class="calendar-shortcut" href="#agendar">▣</a></div>
   <section class="client-title"><span class="big-icon">▣</span><div><h1>Agende seu horário</h1><p>Escolha o serviço, a data e o horário que preferir.</p></div></section>
-
   <section id="agendar" class="booking-form">
-    <div class="booking-item booking-service service-picker">
-      <span class="field-icon">♧</span>
-      <div class="service-picker-main">
-        <label>Serviço</label>
-        <button type="button" id="servicoTrigger" class="service-trigger" aria-haspopup="listbox" aria-expanded="false">
-          <span id="servicoResumo">Escolha o serviço</span><span class="service-chevron">⌄</span>
-        </button>
-        <select id="servico" class="service-native" aria-hidden="true" tabindex="-1"></select>
-      </div>
-      <b class="service-side-chevron">⌄</b>
-    </div>
+    <div class="booking-item booking-service service-picker"><span class="field-icon">♧</span><div class="service-picker-main"><label>Serviço</label><button type="button" id="servicoTrigger" class="service-trigger" aria-haspopup="listbox" aria-expanded="false"><span id="servicoResumo">Escolha o serviço</span><span class="service-chevron">⌄</span></button><select id="servico" class="service-native" aria-hidden="true" tabindex="-1"></select></div><b class="service-side-chevron">⌄</b></div>
     <div id="servicoLista" class="service-list" hidden role="listbox" aria-label="Lista de serviços"></div>
-    <div class="booking-item booking-date date-picker">
-      <span class="field-icon">▣</span>
-      <div class="date-picker-main">
-        <label>Data</label>
-        <button type="button" id="dataTrigger" class="date-trigger" aria-haspopup="dialog" aria-expanded="false">
-          <span id="dataResumo">Selecione a data</span><span class="date-chevron">⌄</span>
-        </button>
-        <input id="data" type="date" class="date-native" aria-hidden="true" tabindex="-1">
-      </div>
-      <b class="date-side-chevron">⌄</b>
-    </div>
-    <div id="calendarioCliente" class="client-calendar" hidden aria-label="Calendário de agendamentos">
-      <div class="calendar-head">
-        <button type="button" id="mesAnterior" aria-label="Mês anterior">‹</button>
-        <strong id="mesCalendario"></strong>
-        <button type="button" id="proximoMes" aria-label="Próximo mês">›</button>
-      </div>
-      <div class="calendar-weekdays"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
-      <div id="diasCalendario" class="calendar-days"></div>
-      <div class="calendar-legend"><span><i class="legend-free"></i> Disponível</span><span><i class="legend-booked"></i> Com agendamento</span></div>
-    </div>
+    <div class="booking-item booking-date date-picker"><span class="field-icon">▣</span><div class="date-picker-main"><label>Data</label><button type="button" id="dataTrigger" class="date-trigger" aria-haspopup="dialog" aria-expanded="false"><span id="dataResumo">Selecione a data</span><span class="date-chevron">⌄</span></button><input id="data" type="date" class="date-native" aria-hidden="true" tabindex="-1"></div><b class="date-side-chevron">⌄</b></div>
+    <div id="calendarioCliente" class="client-calendar" hidden aria-label="Calendário de agendamentos"><div class="calendar-head"><button type="button" id="mesAnterior" aria-label="Mês anterior">‹</button><strong id="mesCalendario"></strong><button type="button" id="proximoMes" aria-label="Próximo mês">›</button></div><div class="calendar-weekdays"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div><div id="diasCalendario" class="calendar-days"></div><div class="calendar-legend"><span><i class="legend-free"></i> Disponível</span><span><i class="legend-booked"></i> Com agendamento</span></div></div>
     <div class="booking-item booking-time"><span class="field-icon">◷</span><div><label>Horário</label><select id="horario"></select></div><b>›</b></div>
     <div class="booking-item booking-data"><span class="field-icon">♙</span><div><label>Seus dados</label><input id="nome" placeholder="Digite seu nome"></div><b>›</b></div>
     <div class="booking-item booking-phone"><span class="field-icon">☎</span><div><label>Telefone</label><input id="telefone" inputmode="tel" placeholder="(00) 00000-0000"></div><b>›</b></div>
     <button id="reservar" class="confirm-button"><span>▣</span> CONFIRMAR AGENDAMENTO</button>
   </section>
-
   <section class="consulta-card"><h2>Consultar reserva</h2><p>Digite seu telefone para ver seus próximos horários.</p><input id="consultaTelefone" inputmode="tel" placeholder="Seu telefone"><button id="consultar">Consultar agendamento</button><div id="lista"></div></section>
-
-  <footer class="client-footer">
-    <div class="footer-top"><div class="footer-mark">BRONZE <small>CONCEPT</small> <b>JOY</b></div></div>
-    <div class="footer-grid">
-      <div class="footer-message"><span class="footer-wa">☏</span><p>Tire suas dúvidas e reserve<br>seu horário pelo nosso WhatsApp.</p></div>
-      <div class="footer-contact"><span>◎</span><a href="https://instagram.com/joybronze.concept" target="_blank" rel="noopener noreferrer">@joybronze.concept</a></div>
-      <div class="footer-contact"><span>☏</span><a href="https://wa.me/5519996788649" target="_blank" rel="noopener noreferrer">(19) 99678-8649</a></div>
-      <div class="footer-address"><span>⌖</span><span>Rua Florêncio Domingues, 246<br>Centro - Pinhalzinho SP<br><small>CEP: 12995-039</small></span></div>
-    </div>
-  </footer>
-</main><script type="module" src="cliente-publico.js"></script></body></html>
+  <footer class="client-footer"><div class="footer-top"><div class="footer-mark">BRONZE <small>CONCEPT</small> <b>JOY</b></div></div><div class="footer-grid"><div class="footer-message"><span class="footer-wa">☏</span><p>Tire suas dúvidas e reserve<br>seu horário pelo nosso WhatsApp.</p></div><div class="footer-contact"><span>◎</span><a href="https://instagram.com/joybronze.concept" target="_blank" rel="noopener noreferrer">@joybronze.concept</a></div><div class="footer-contact"><span>☏</span><a href="https://wa.me/5519996788649" target="_blank" rel="noopener noreferrer">(19) 99678-8649</a></div><div class="footer-address"><span>⌖</span><span>Rua Florêncio Domingues, 246<br>Centro - Pinhalzinho SP<br><small>CEP: 12995-039</small></span></div></div></footer>
+</main><script type="module" src="cliente-publico.js"></script><script>
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
+// Tenta fullscreen na primeira interação. Navegadores podem exigir este gesto do usuário.
+(function(){
+  let tentou=false;
+  async function fullscreen(){
+    if(tentou || window.matchMedia("(display-mode: standalone)").matches) return;
+    tentou=true;
+    try{ if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen(); }catch(e){}
+  }
+  ["pointerdown","touchstart","click"].forEach(ev=>document.addEventListener(ev,fullscreen,{once:true,passive:true}));
+})();
+</script></body></html>
