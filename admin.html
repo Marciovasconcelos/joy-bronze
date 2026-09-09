@@ -18,10 +18,7 @@
 <body>
 
 <div class="brand-banner" aria-label="Bronze Joy Concept">
-  <div class="joy-logo">
-    <div class="joy-logo-main">BRONZE <span>JOY</span></div>
-    <div class="joy-logo-sub">CONCEPT</div>
-  </div>
+  <img src="logo-joy.png" alt="Bronze Joy Concept" class="joy-logo-image">
 </div>
 
 <div class="admin-shell">
@@ -301,3 +298,38 @@ if ("serviceWorker" in navigator) {
 </body>
 </html>
 ```
+/* LOGO OFICIAL - CLIENTE E ADMIN */
+.brand-banner{
+  width:100%;
+  min-height:110px !important;
+  height:110px !important;
+  padding:10px 16px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  background:#f5f0e8 !important;
+}
+
+.brand-banner .joy-logo-image{
+  display:block !important;
+  width:auto !important;
+  max-width:min(90%,500px) !important;
+  max-height:90px !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+
+@media(max-width:760px){
+  .brand-banner{
+    min-height:85px !important;
+    height:85px !important;
+    padding:8px 12px !important;
+  }
+
+  .brand-banner .joy-logo-image{
+    max-width:92% !important;
+    max-height:68px !important;
+  }
+}
