@@ -6,6 +6,7 @@ let config = { abertura:"09:00", fechamento:"18:00", intervalo:60 };
 const WHATSAPP_SALAO = "5519996788649";
 
 function normalizarTelefone(v){ return v.replace(/\D/g,""); }
+function saudacaoAtual(){ const h=new Date().getHours(); return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite"; }
 
 function gerarHorarios(){
   const data = $("#data").value;
@@ -103,17 +104,14 @@ let agendamentosCalendario = [];
 function dataLocalISO(ano, mes, dia){
   return `${ano}-${String(mes+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
 }
-
 function hojeISO(){
   const d=new Date();
   return dataLocalISO(d.getFullYear(),d.getMonth(),d.getDate());
 }
-
 async function carregarAgendamentosCalendario(){
   const s=await getDocs(collection(db,"agendamentos"));
   agendamentosCalendario=s.docs.map(d=>d.data()).filter(a=>["pendente","confirmado"].includes(a.status));
 }
-
 function renderCalendarioCliente(){
   const grid=$("#diasCalendario"), titulo=$("#mesCalendario");
   if(!grid || !titulo) return;
@@ -147,7 +145,6 @@ function renderCalendarioCliente(){
     await carregarHorarios();
   });
 }
-
 function fecharCalendario(){
   const cal=$("#calendarioCliente"), trigger=$("#dataTrigger");
   if(!cal) return;
@@ -155,38 +152,20 @@ function fecharCalendario(){
   trigger?.setAttribute("aria-expanded","false");
   document.querySelector(".date-picker")?.classList.remove("is-open");
 }
-
 function configurarCalendarioCliente(){
   const trigger=$("#dataTrigger"), cal=$("#calendarioCliente");
   trigger.onclick=async(e)=>{
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault(); e.stopPropagation();
     const abrir=cal.hidden;
-
-    if(!abrir){
-      fecharCalendario();
-      return;
-    }
-
-    /* Abre o calendário imediatamente, mesmo se a consulta dos agendamentos falhar */
+    if(!abrir){ fecharCalendario(); return; }
     const selecionada=$("#data")?.value;
-    if(selecionada){
-      const [a,m]=selecionada.split("-").map(Number);
-      calendarioAtual=new Date(a,m-1,1);
-    }
-
+    if(selecionada){ const [a,m]=selecionada.split("-").map(Number); calendarioAtual=new Date(a,m-1,1); }
     cal.hidden=false;
     trigger.setAttribute("aria-expanded","true");
     document.querySelector(".date-picker")?.classList.add("is-open");
     renderCalendarioCliente();
-
-    try{
-      await carregarAgendamentosCalendario();
-      renderCalendarioCliente();
-    }catch(err){
-      console.warn("Não foi possível carregar os indicadores de agendamento no calendário:",err);
-      /* O calendário continua funcionando normalmente para selecionar a data */
-    }
+    try{ await carregarAgendamentosCalendario(); renderCalendarioCliente(); }
+    catch(err){ console.warn("Não foi possível carregar os indicadores de agendamento no calendário:",err); }
   };
   $("#mesAnterior").onclick=()=>{
     const hoje=new Date(); hoje.setDate(1);
@@ -194,25 +173,17 @@ function configurarCalendarioCliente(){
     if(teste>=new Date(hoje.getFullYear(),hoje.getMonth(),1)){calendarioAtual=teste;renderCalendarioCliente();}
   };
   $("#proximoMes").onclick=()=>{calendarioAtual=new Date(calendarioAtual.getFullYear(),calendarioAtual.getMonth()+1,1);renderCalendarioCliente();};
-  document.addEventListener("click",e=>{
-    if(!e.target.closest(".date-picker")&&!e.target.closest("#calendarioCliente")) fecharCalendario();
-  });
+  document.addEventListener("click",e=>{ if(!e.target.closest(".date-picker")&&!e.target.closest("#calendarioCliente")) fecharCalendario(); });
 }
-
 async function carregarHorarios(){
   $("#horario").innerHTML = "<option>Carregando...</option>";
   const data = $("#data").value;
   if(!data) return;
   const s = await getDocs(query(collection(db,"agendamentos"),where("data","==",data)));
-  const ocupados = new Set(
-    s.docs.filter(d=>["pendente","confirmado"].includes(d.data().status)).map(d=>d.data().horario)
-  );
+  const ocupados = new Set(s.docs.filter(d=>["pendente","confirmado"].includes(d.data().status)).map(d=>d.data().horario));
   const livres = gerarHorarios().filter(h=>!ocupados.has(h));
-  $("#horario").innerHTML = livres.length
-    ? livres.map(h=>`<option>${h}</option>`).join("")
-    : "<option>Nenhum horário disponível</option>";
+  $("#horario").innerHTML = livres.length ? livres.map(h=>`<option>${h}</option>`).join("") : "<option>Nenhum horário disponível</option>";
 }
-
 async function consultar(){
   const telefone = normalizarTelefone($("#consultaTelefone").value);
   if(!telefone){ alert("Digite seu telefone."); return; }
@@ -223,8 +194,7 @@ async function consultar(){
   }).join("");
   document.querySelectorAll("[data-cancelar]").forEach(b=>b.onclick=async()=>{
     if(confirm("Deseja cancelar esta reserva?")){
-      await deleteDoc(doc(db,"agendamentos",b.dataset.cancelar));
-      consultar();
+      await deleteDoc(doc(db,"agendamentos",b.dataset.cancelar)); consultar();
     }
   });
 }
@@ -243,36 +213,29 @@ $("#reservar").onclick = async ()=>{
   const telefone = normalizarTelefone(telefoneOriginal);
   const data = $("#data").value;
   const horario = $("#horario").value;
-
   if(!nome || !telefone){ alert("Informe nome e telefone."); return; }
   if(telefone.length < 10){ alert("Digite um telefone válido."); return; }
   if(!data || !horario || horario.includes("Nenhum")){ alert("Escolha data e horário."); return; }
-
   const servicoTexto = $("#servico").selectedOptions[0]?.textContent || "Sessão";
   const existentes = await getDocs(query(collection(db,"agendamentos"),where("data","==",data),where("horario","==",horario)));
   if(existentes.docs.some(d=>["pendente","confirmado"].includes(d.data().status))){
-    alert("Este horário acabou de ser reservado. Escolha outro.");
-    carregarHorarios();
-    return;
+    alert("Este horário acabou de ser reservado. Escolha outro."); carregarHorarios(); return;
   }
-
   await addDoc(collection(db,"agendamentos"),{nome,telefone,servicoId:$("#servico").value,servico:servicoTexto,data,horario,status:"pendente",criadoEm:new Date().toISOString()});
   if(navigator.vibrate) navigator.vibrate([100,80,100]);
-
   const dataFormatada = new Date(data + "T12:00:00").toLocaleDateString("pt-BR");
   const mensagem = [
-    "NOVO AGENDAMENTO - JOY BRONZE",
+    `${saudacaoAtual()}, ${nome}!`,
     "",
-    `Cliente: ${nome}`,
-    `Telefone: ${telefoneOriginal}`,
+    "Seu agendamento na Joy Bronze foi realizado com sucesso! 💖",
+    "",
     `Serviço: ${servicoTexto}`,
     `Data: ${dataFormatada}`,
     `Horário: ${horario}`,
     "",
-    "Reserva realizada pelo site."
+    "Aguardamos você! ✨"
   ].join("\n");
   const whatsappUrl = `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(mensagem)}`;
-
   alert("Reserva realizada com sucesso!\n\nAbrindo o WhatsApp para enviar a confirmação.");
   window.open(whatsappUrl,"_blank","noopener,noreferrer");
   $("#consultaTelefone").value = telefoneOriginal;
