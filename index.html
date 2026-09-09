@@ -20,7 +20,27 @@
       <b class="service-side-chevron">⌄</b>
     </div>
     <div id="servicoLista" class="service-list" hidden role="listbox" aria-label="Lista de serviços"></div>
-    <div class="booking-item booking-date"><span class="field-icon">▣</span><div><label>Data</label><input id="data" type="date"></div><b>›</b></div>
+    <div class="booking-item booking-date date-picker">
+      <span class="field-icon">▣</span>
+      <div class="date-picker-main">
+        <label>Data</label>
+        <button type="button" id="dataTrigger" class="date-trigger" aria-haspopup="dialog" aria-expanded="false">
+          <span id="dataResumo">Selecione a data</span><span class="date-chevron">⌄</span>
+        </button>
+        <input id="data" type="date" class="date-native" aria-hidden="true" tabindex="-1">
+      </div>
+      <b class="date-side-chevron">⌄</b>
+    </div>
+    <div id="calendarioCliente" class="client-calendar" hidden aria-label="Calendário de agendamentos">
+      <div class="calendar-head">
+        <button type="button" id="mesAnterior" aria-label="Mês anterior">‹</button>
+        <strong id="mesCalendario"></strong>
+        <button type="button" id="proximoMes" aria-label="Próximo mês">›</button>
+      </div>
+      <div class="calendar-weekdays"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+      <div id="diasCalendario" class="calendar-days"></div>
+      <div class="calendar-legend"><span><i class="legend-free"></i> Disponível</span><span><i class="legend-booked"></i> Com agendamento</span></div>
+    </div>
     <div class="booking-item booking-time"><span class="field-icon">◷</span><div><label>Horário</label><select id="horario"></select></div><b>›</b></div>
     <div class="booking-item booking-data"><span class="field-icon">♙</span><div><label>Seus dados</label><input id="nome" placeholder="Digite seu nome"></div><b>›</b></div>
     <div class="booking-item booking-phone"><span class="field-icon">☎</span><div><label>Telefone</label><input id="telefone" inputmode="tel" placeholder="(00) 00000-0000"></div><b>›</b></div>
