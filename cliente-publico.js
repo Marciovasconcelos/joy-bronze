@@ -19,6 +19,7 @@ let config = {
 };
 
 const WHATSAPP_SALAO = "5519996788649";
+
 /* ==========================================
    MÚLTIPLOS PROCEDIMENTOS
 ========================================== */
@@ -65,17 +66,6 @@ function duracaoServicoMinutos(servico) {
   return Number(config.intervalo || 60);
 }
 
-  const match = texto.match(
-    /(\d+)\s*MINUTOS?/i
-  );
-
-  if (match) {
-    return Number(match[1]);
-  }
-
-  return Number(config.intervalo || 60);
-}
-
 function duracaoTotalServicos() {
 
   return obterServicosSelecionados()
@@ -84,41 +74,225 @@ function duracaoTotalServicos() {
         total + duracaoServicoMinutos(servico),
       0
     );
-
 }
+
+function valorTotalServicos() {
+
+  return obterServicosSelecionados()
+    .reduce(
+      (total, servico) =>
+        total + Number(servico.preco || 0),
+      0
+    );
+}
+
+/* ==========================================
+   RESUMO ANTES DE CONFIRMAR
+========================================== */
+
+function atualizarResumoAgendamento() {
+
+  const resumo =
+    document.querySelector(
+      "#resumoProcedimentos"
+    );
+
+  if (!resumo) return;
+
+  const servicos =
+    obterServicosSelecionados();
+
+  const lista =
+    document.querySelector(
+      "#resumoListaProcedimentos"
+    );
+
+  const tempo =
+    document.querySelector(
+      "#resumoTempoTotal"
+    );
+
+  const valor =
+    document.querySelector(
+      "#resumoValorTotal"
+    );
+
+  if (!servicos.length) {
+
+    resumo.hidden = true;
+
+    return;
+  }
+
+  resumo.hidden = false;
+
+  lista.innerHTML =
+    servicos
+      .map(
+        servico => `
+          <div class="resumo-procedimento">
+            <span>✓ ${servico.nome}</span>
+
+            <strong>
+              R$ ${Number(
+                servico.preco || 0
+              ).toFixed(2)}
+            </strong>
+          </div>
+        `
+      )
+      .join("");
+
+  const minutos =
+    duracaoTotalServicos();
+
+  const horas =
+    Math.floor(
+      minutos / 60
+    );
+
+  const minutosRestantes =
+    minutos % 60;
+
+  if (horas > 0) {
+
+    tempo.textContent =
+      `${horas}h${
+        minutosRestantes
+          ? `${minutosRestantes}min`
+          : ""
+      }`;
+
+  } else {
+
+    tempo.textContent =
+      `${minutos} minutos`;
+
+  }
+
+  valor.textContent =
+    `R$ ${valorTotalServicos()
+      .toFixed(2)}`;
+}
+
+function criarResumoAntesConfirmar() {
+
+  if (
+    document.querySelector(
+      "#resumoProcedimentos"
+    )
+  ) return;
+
+  const botao =
+    $("#reservar");
+
+  if (!botao) return;
+
+  const resumo =
+    document.createElement(
+      "div"
+    );
+
+  resumo.id =
+    "resumoProcedimentos";
+
+  resumo.hidden =
+    true;
+
+  resumo.innerHTML = `
+
+    <div class="resumo-titulo">
+      ✨ Procedimentos selecionados
+    </div>
+
+    <div
+      id="resumoListaProcedimentos"
+      class="resumo-lista"
+    ></div>
+
+    <div class="resumo-total">
+
+      <div>
+        <span>⏱️ Tempo total</span>
+        <strong
+          id="resumoTempoTotal"
+        ></strong>
+      </div>
+
+      <div>
+        <span>💰 Valor total</span>
+        <strong
+          id="resumoValorTotal"
+        ></strong>
+      </div>
+
+    </div>
+
+  `;
+
+  botao.parentNode.insertBefore(
+    resumo,
+    botao
+  );
+}
+
 function normalizarTelefone(v) {
   return v.replace(/\D/g, "");
 }
 
 function saudacaoAtual() {
   const h = new Date().getHours();
-  return h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
+
+  if (h < 12) return "Bom dia";
+  if (h < 18) return "Boa tarde";
+
+  return "Boa noite";
 }
+/* ==========================================
+   HORÁRIOS
+========================================== */
 
 function gerarHorarios() {
 
-  const data = $("#data").value;
+  const data =
+    $("#data").value;
 
   if (!data) return [];
 
-  const [h, m] = config.abertura.split(":").map(Number);
-  const [fh, fm] = config.fechamento.split(":").map(Number);
+  const [h, m] =
+    config.abertura
+      .split(":")
+      .map(Number);
 
-  const inicio = h * 60 + m;
-  const fim = fh * 60 + fm;
+  const [fh, fm] =
+    config.fechamento
+      .split(":")
+      .map(Number);
+
+  const inicio =
+    h * 60 + m;
+
+  const fim =
+    fh * 60 + fm;
 
   const lista = [];
 
   for (
     let x = inicio;
     x < fim;
-    x += Number(config.intervalo || 60)
+    x += Number(
+      config.intervalo || 60
+    )
   ) {
 
     lista.push(
-      String(Math.floor(x / 60)).padStart(2, "0") +
+      String(
+        Math.floor(x / 60)
+      ).padStart(2, "0") +
       ":" +
-      String(x % 60).padStart(2, "0")
+      String(
+        x % 60
+      ).padStart(2, "0")
     );
 
   }
@@ -126,45 +300,43 @@ function gerarHorarios() {
   return lista;
 }
 
+/* ==========================================
+   CONFIGURAÇÕES
+========================================== */
+
 async function carregarConfig() {
 
-  const s = await getDoc(
-    doc(db, "configuracoes", "salao")
-  );
+  const s =
+    await getDoc(
+      doc(
+        db,
+        "configuracoes",
+        "salao"
+      )
+    );
 
   if (s.exists()) {
+
     config = {
       ...config,
       ...s.data()
     };
+
   }
 
 }
 
-function duracaoDoServico(nome) {
-
-  const n = (nome || "").toUpperCase();
-
-  const m = n.match(
-    /(20|30|40|50)\s*MINUTOS?/
-  );
-
-  if (m) {
-    return `${m[1]} minutos`;
-  }
-
-  if (n.includes("BANHO DE LUA")) {
-    return "Sessão especial";
-  }
-
-  return "Horário personalizado";
-
-}
+/* ==========================================
+   LISTA DE PROCEDIMENTOS
+========================================== */
 
 function fecharListaServicos() {
 
-  const lista = $("#servicoLista");
-  const trigger = $("#servicoTrigger");
+  const lista =
+    $("#servicoLista");
+
+  const trigger =
+    $("#servicoTrigger");
 
   if (!lista || lista.hidden) return;
 
@@ -176,9 +348,12 @@ function fecharListaServicos() {
   );
 
   document
-    .querySelector(".service-picker")
-    ?.classList.remove("is-open");
-
+    .querySelector(
+      ".service-picker"
+    )
+    ?.classList.remove(
+      "is-open"
+    );
 }
 
 function renderListaServicos() {
@@ -247,13 +422,17 @@ function renderListaServicos() {
             </span>
 
             <span class="service-price">
+
               R$ ${Number(
                 servico.preco || 0
               ).toFixed(2)}
+
             </span>
 
             <span class="service-check">
+
               ${ativo ? "✓" : ""}
+
             </span>
 
           </button>
@@ -303,6 +482,8 @@ function renderListaServicos() {
 
         renderListaServicos();
 
+        atualizarResumoAgendamento();
+
       };
 
     });
@@ -319,37 +500,44 @@ function configurarListaServicos() {
 
   if (!trigger || !lista) return;
 
-  trigger.onclick = e => {
+  trigger.onclick =
+    e => {
 
-    e.stopPropagation();
+      e.stopPropagation();
 
-    const abrir =
-      lista.hidden;
+      const abrir =
+        lista.hidden;
 
-    lista.hidden =
-      !abrir;
+      lista.hidden =
+        !abrir;
 
-    trigger.setAttribute(
-      "aria-expanded",
-      String(abrir)
-    );
-
-    document
-      .querySelector(".service-picker")
-      ?.classList.toggle(
-        "is-open",
-        abrir
+      trigger.setAttribute(
+        "aria-expanded",
+        String(abrir)
       );
 
-  };
+      document
+        .querySelector(
+          ".service-picker"
+        )
+        ?.classList.toggle(
+          "is-open",
+          abrir
+        );
+
+    };
 
   document.addEventListener(
     "click",
     e => {
 
       if (
-        !e.target.closest(".service-picker") &&
-        !e.target.closest("#servicoLista")
+        !e.target.closest(
+          ".service-picker"
+        ) &&
+        !e.target.closest(
+          "#servicoLista"
+        )
       ) {
 
         fecharListaServicos();
@@ -365,7 +553,10 @@ async function carregarServicos() {
 
   const s =
     await getDocs(
-      collection(db, "servicos")
+      collection(
+        db,
+        "servicos"
+      )
     );
 
   const select =
@@ -375,24 +566,36 @@ async function carregarServicos() {
 
   s.docs
     .filter(
-      d => d.data().ativo !== false
+      d =>
+        d.data().ativo !== false
     )
     .forEach(d => {
 
       const dados =
         d.data();
 
-   dadosServicos.push({
-   id: d.id,
-   nome: dados.nome || "Procedimento",
-   preco: Number(dados.preco || 0),
- 
-  duracaoMinutos: Number(
-    dados.duracaoMinutos ||
-    dados.duracao ||
-    0
-  )
-});    
+      dadosServicos.push({
+
+        id:
+          d.id,
+
+        nome:
+          dados.nome ||
+          "Procedimento",
+
+        preco:
+          Number(
+            dados.preco || 0
+          ),
+
+        duracaoMinutos:
+          Number(
+            dados.duracaoMinutos ||
+            dados.duracao ||
+            0
+          )
+
+      });
 
     });
 
@@ -417,18 +620,14 @@ async function carregarServicos() {
   configurarListaServicos();
 
 }
+/* ==========================================
+   CALENDÁRIO
+========================================== */
 
-let calendarioAtual =
-  new Date();
+let calendarioAtual = new Date();
+let agendamentosCalendario = [];
 
-let agendamentosCalendario =
-  [];
-
-function dataLocalISO(
-  ano,
-  mes,
-  dia
-) {
+function dataLocalISO(ano, mes, dia) {
 
   return (
     `${ano}-` +
@@ -440,8 +639,7 @@ function dataLocalISO(
 
 function hojeISO() {
 
-  const d =
-    new Date();
+  const d = new Date();
 
   return dataLocalISO(
     d.getFullYear(),
@@ -529,28 +727,34 @@ function renderCalendarioCliente() {
     hojeISO();
 
   const selecionada =
-    $("#data")?.value ||
-    "";
+    $("#data")?.value || "";
 
   const ocupados =
     {};
 
-  agendamentosCalendario.forEach(a => {
+  agendamentosCalendario.forEach(
+    a => {
 
-    if (
-      a.data?.startsWith(
-        `${ano}-${String(
-          mes + 1
-        ).padStart(2, "0")}`
-      )
-    ) {
+      if (
+        a.data?.startsWith(
+          `${ano}-${String(
+            mes + 1
+          ).padStart(
+            2,
+            "0"
+          )}`
+        )
+      ) {
 
-      ocupados[a.data] =
-        (ocupados[a.data] || 0) + 1;
+        ocupados[a.data] =
+          (
+            ocupados[a.data] || 0
+          ) + 1;
+
+      }
 
     }
-
-  });
+  );
 
   let html = "";
 
@@ -587,16 +791,30 @@ function renderCalendarioCliente() {
     html += `
       <button
         type="button"
-        class="calendar-day
+        class="
+          calendar-day
           ${passado ? "is-past" : ""}
           ${qtd ? "has-booking" : ""}
-          ${selecionada === iso ? "is-selected" : ""}
+          ${
+            selecionada === iso
+              ? "is-selected"
+              : ""
+          }
         "
         data-date="${iso}"
         ${passado ? "disabled" : ""}
       >
-        <span>${dia}</span>
-        ${qtd ? `<small>${qtd}</small>` : ""}
+
+        <span>
+          ${dia}
+        </span>
+
+        ${
+          qtd
+            ? `<small>${qtd}</small>`
+            : ""
+        }
+
       </button>
     `;
 
@@ -610,35 +828,39 @@ function renderCalendarioCliente() {
       ".calendar-day:not(:disabled)"
     )
     .forEach(
-      b => b.onclick =
-        async () => {
+      b => {
 
-          const iso =
-            b.dataset.date;
+        b.onclick =
+          async () => {
 
-          $("#data").value =
-            iso;
+            const iso =
+              b.dataset.date;
 
-          $("#dataResumo").textContent =
-            new Date(
-              iso +
-              "T12:00:00"
-            ).toLocaleDateString(
-              "pt-BR",
-              {
-                day: "2-digit",
-                month: "long",
-                year: "numeric"
-              }
-            );
+            $("#data").value =
+              iso;
 
-          fecharCalendario();
+            $("#dataResumo").textContent =
+              new Date(
+                iso +
+                "T12:00:00"
+              ).toLocaleDateString(
+                "pt-BR",
+                {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric"
+                }
+              );
 
-          renderCalendarioCliente();
+            fecharCalendario();
 
-          await carregarHorarios();
+            renderCalendarioCliente();
 
-        }
+            await carregarHorarios();
+
+          };
+
+      }
     );
 
 }
@@ -662,7 +884,9 @@ function fecharCalendario() {
   );
 
   document
-    .querySelector(".date-picker")
+    .querySelector(
+      ".date-picker"
+    )
     ?.classList.remove(
       "is-open"
     );
@@ -677,11 +901,12 @@ function configurarCalendarioCliente() {
   const cal =
     $("#calendarioCliente");
 
+  if (!trigger || !cal) return;
+
   trigger.onclick =
     async e => {
 
       e.preventDefault();
-
       e.stopPropagation();
 
       const abrir =
@@ -690,7 +915,6 @@ function configurarCalendarioCliente() {
       if (!abrir) {
 
         fecharCalendario();
-
         return;
 
       }
@@ -700,10 +924,7 @@ function configurarCalendarioCliente() {
 
       if (selecionada) {
 
-        const [
-          a,
-          m
-        ] =
+        const [a, m] =
           selecionada
             .split("-")
             .map(Number);
@@ -726,7 +947,9 @@ function configurarCalendarioCliente() {
       );
 
       document
-        .querySelector(".date-picker")
+        .querySelector(
+          ".date-picker"
+        )
         ?.classList.add(
           "is-open"
         );
@@ -802,8 +1025,12 @@ function configurarCalendarioCliente() {
     e => {
 
       if (
-        !e.target.closest(".date-picker") &&
-        !e.target.closest("#calendarioCliente")
+        !e.target.closest(
+          ".date-picker"
+        ) &&
+        !e.target.closest(
+          "#calendarioCliente"
+        )
       ) {
 
         fecharCalendario();
@@ -814,6 +1041,9 @@ function configurarCalendarioCliente() {
   );
 
 }
+/* ==========================================
+   HORÁRIOS DISPONÍVEIS
+========================================== */
 
 async function carregarHorarios() {
 
@@ -855,16 +1085,14 @@ async function carregarHorarios() {
             )
         )
         .map(
-          d =>
-            d.data().horario
+          d => d.data().horario
         )
     );
 
   const livres =
     gerarHorarios()
       .filter(
-        h =>
-          !ocupados.has(h)
+        h => !ocupados.has(h)
       );
 
   $("#horario").innerHTML =
@@ -875,13 +1103,16 @@ async function carregarHorarios() {
               `<option>${h}</option>`
           )
           .join("")
-      : "<option>Nenhum horário disponível</option>";
+      : `
+        <option>
+          Nenhum horário disponível
+        </option>
+      `;
 
 }
 
 /* ==========================================
-   CONSULTAR AGENDAMENTOS DO CLIENTE
-   MOSTRA APENAS PENDENTE E CONFIRMADO
+   CONSULTAR AGENDAMENTOS DA CLIENTE
 ========================================== */
 
 async function consultar() {
@@ -916,19 +1147,9 @@ async function consultar() {
       )
     );
 
-  /*
-    Filtra os agendamentos.
-
-    APARECEM:
-    - pendente
-    - confirmado
-
-    NÃO APARECEM:
-    - concluído
-    - concluido
-    - cancelado
-    - cancelada
-  */
+  /* Mostra somente agendamentos
+     pendentes ou confirmados.
+     Concluídos e cancelados não aparecem. */
 
   const agendamentosAtivos =
     s.docs.filter(
@@ -936,22 +1157,19 @@ async function consultar() {
 
         const status =
           String(
-            d.data().status ||
-            ""
+            d.data().status || ""
           )
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(
-            /[\u0300-\u036f]/g,
-            ""
-          );
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+              /[\u0300-\u036f]/g,
+              ""
+            );
 
         return [
           "pendente",
           "confirmado"
-        ].includes(
-          status
-        );
+        ].includes(status);
 
       }
     );
@@ -1083,14 +1301,10 @@ $("#reservar").onclick =
   async () => {
 
     const nome =
-      $("#nome")
-        .value
-        .trim();
+      $("#nome").value.trim();
 
     const telefoneOriginal =
-      $("#telefone")
-        .value
-        .trim();
+      $("#telefone").value.trim();
 
     const telefone =
       normalizarTelefone(
@@ -1103,10 +1317,7 @@ $("#reservar").onclick =
     const horario =
       $("#horario").value;
 
-    if (
-      !nome ||
-      !telefone
-    ) {
+    if (!nome || !telefone) {
 
       alert(
         "Informe nome e telefone."
@@ -1144,24 +1355,27 @@ $("#reservar").onclick =
 
     }
 
-   const servicos =
-  obterServicosSelecionados();
+    const servicos =
+      obterServicosSelecionados();
 
-if (!servicos.length) {
+    if (!servicos.length) {
 
-  alert(
-    "Selecione pelo menos um procedimento."
-  );
+      alert(
+        "Selecione pelo menos um procedimento."
+      );
 
-  return;
+      return;
 
-}
+    }
 
-const servicoTexto =
-  textoServicosSelecionados();
+    const servicoTexto =
+      textoServicosSelecionados();
 
-const duracaoTotal =
-  duracaoTotalServicos(); 
+    const duracaoTotal =
+      duracaoTotalServicos();
+
+    const valorTotal =
+      valorTotalServicos();
 
     const existentes =
       await getDocs(
@@ -1214,38 +1428,57 @@ const duracaoTotal =
         "agendamentos"
       ),
       {
+
         nome,
         telefone,
+
         servicoId:
-  servicos[0].id,
+          servicos[0].id,
 
-servicoIds:
-  servicos.map(
-    s => s.id
-  ),
+        servicoIds:
+          servicos.map(
+            s => s.id
+          ),
 
-servicos:
-  servicos.map(
-    s => ({
-      id: s.id,
-      nome: s.nome,
-      preco: s.preco,
-      duracaoMinutos:
-        duracaoServicoMinutos(s)
-    })
-  ),
+        servicos:
+          servicos.map(
+            s => ({
 
-servico:
-  servicoTexto,
+              id:
+                s.id,
 
-duracaoTotalMinutos:
-  duracaoTotal,
+              nome:
+                s.nome,
+
+              preco:
+                s.preco,
+
+              duracaoMinutos:
+                duracaoServicoMinutos(
+                  s
+                )
+
+            })
+          ),
+
+        servico:
+          servicoTexto,
+
+        duracaoTotalMinutos:
+          duracaoTotal,
+
+        valorTotal:
+          valorTotal,
+
         data,
         horario,
+
         status:
           "pendente",
+
         criadoEm:
           new Date().toISOString()
+
       }
     );
 
@@ -1281,7 +1514,11 @@ duracaoTotalMinutos:
 
       "",
 
-      `Serviço: ${servicoTexto}`,
+      `Serviços: ${servicoTexto}`,
+
+      `Tempo total: ${duracaoTotal} minutos`,
+
+      `Valor total: R$ ${valorTotal.toFixed(2)}`,
 
       `Data: ${dataFormatada}`,
 
@@ -1291,9 +1528,7 @@ duracaoTotalMinutos:
 
       "Aguardamos você! ✨"
 
-    ].join(
-      "\n"
-    );
+    ].join("\n");
 
     const whatsappUrl =
       `https://wa.me/${WHATSAPP_SALAO}?text=${encodeURIComponent(
@@ -1318,7 +1553,6 @@ duracaoTotalMinutos:
     carregarHorarios();
 
   };
-
 /* ==========================================
    INICIALIZAÇÃO
 ========================================== */
@@ -1327,4 +1561,12 @@ await carregarConfig();
 
 await carregarServicos();
 
+/* Cria o quadro de procedimentos
+   antes do botão Confirmar Agendamento */
+criarResumoAntesConfirmar();
+
+/* Atualiza o resumo inicial */
+atualizarResumoAgendamento();
+
+/* Ativa o calendário */
 configurarCalendarioCliente();
