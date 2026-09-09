@@ -21,8 +21,7 @@
 .draft-card-text{display:flex;flex-direction:column;gap:14px}
 .draft-card small{font-size:21px;color:#5d554d}
 .draft-card b{font-size:42px;color:#4c3828;line-height:1;font-weight:800}
-.draft-card i{position:absolute;right:30px;bottom:48px;font-style:normal;font-size:48px;color:#704921;font-weight:300}
-.greeting-card .draft-card-text{justify-content:center}.greeting-card b{font-size:34px}
+.greeting-card .draft-card-text{justify-content:center}.greeting-card small{text-transform:capitalize;font-size:17px}.greeting-card b{font-size:38px;letter-spacing:1px}
 .draft-actions h2{font-size:33px;margin:0 0 18px;color:#4b3829}.draft-actions h2 span{color:#704921;margin-right:10px}
 .draft-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
 .draft-action-grid a{height:90px;border-radius:16px;display:flex;align-items:center;gap:25px;padding:0 34px;background:linear-gradient(105deg,#70431f,#8a5a2d);color:#fff8ec;text-decoration:none;font-size:20px;box-shadow:0 8px 18px #68493218}
@@ -31,4 +30,4 @@
 .admin-draft-body .admin-panel{margin-top:34px!important;border-radius:18px!important;background:#fffdf9!important}
 .admin-draft-body .admin-footer{display:flex!important}
 @media(max-width:900px){.draft-admin{padding:34px 22px!important}.draft-stats,.draft-action-grid{grid-template-columns:1fr!important}.draft-card{min-height:150px}.draft-actions h2{font-size:28px}}
-@media(max-width:600px){.draft-brand{height:130px}.draft-side{width:80px}.draft-name{font-size:42px}.draft-concept{font-size:13px;letter-spacing:4px;margin-top:12px}.draft-admin{padding:28px 16px!important}.draft-welcome{gap:14px;margin-bottom:25px}.line-icon{width:44px;font-size:40px}.draft-welcome h1{font-size:25px;margin-bottom:8px}.draft-welcome p{font-size:15px;line-height:1.45}.draft-card{padding:22px 24px;min-height:130px;border-radius:16px}.draft-card-icon{font-size:42px;min-width:44px}.draft-card small{font-size:16px}.draft-card b{font-size:31px}.greeting-card b{font-size:25px}.draft-card i{right:20px;bottom:38px;font-size:38px}.draft-stats{gap:14px!important;margin-bottom:38px!important}.draft-actions h2{font-size:25px}.draft-action-grid{gap:14px}.draft-action-grid a{height:74px;padding:0 20px;font-size:16px;gap:18px}.draft-action-grid a span{font-size:31px}}
+@media(max-width:600px){.draft-brand{height:130px}.draft-side{width:80px}.draft-name{font-size:42px}.draft-concept{font-size:13px;letter-spacing:4px;margin-top:12px}.draft-admin{padding:28px 16px!important}.draft-welcome{gap:14px;margin-bottom:25px}.line-icon{width:44px;font-size:40px}.draft-welcome h1{font-size:25px;margin-bottom:8px}.draft-welcome p{font-size:15px;line-height:1.45}.draft-card{padding:22px 24px;min-height:130px;border-radius:16px}.draft-card-icon{font-size:42px;min-width:44px}.draft-card small{font-size:16px}.draft-card b{font-size:31px}.greeting-card b{font-size:25px}.draft-stats{gap:14px!important;margin-bottom:38px!important}.draft-actions h2{font-size:25px}.draft-action-grid{gap:14px}.draft-action-grid a{height:74px;padding:0 20px;font-size:16px;gap:18px}.draft-action-grid a span{font-size:31px}}
