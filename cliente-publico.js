@@ -3,7 +3,7 @@ import { collection, addDoc, getDocs, query, where, doc, getDoc, deleteDoc } fro
 
 const $ = s => document.querySelector(s);
 let config = { abertura:"09:00", fechamento:"18:00", intervalo:60 };
-const WHATSAPP_SALAO = "5519995044272";
+const WHATSAPP_SALAO = "5519996788649";
 
 function normalizarTelefone(v){ return v.replace(/\D/g,""); }
 
