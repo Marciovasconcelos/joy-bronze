@@ -41,6 +41,7 @@
       "joy-header-fix.css",
       "joy-layout-exato.css",
       "manifest-admin.json",
+      "icon-admin.svg",
       "sw-admin.js"
     ],
     "win": {
