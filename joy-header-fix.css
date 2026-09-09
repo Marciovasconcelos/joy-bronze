@@ -18,7 +18,7 @@
   border-bottom:1px solid #dccfbd !important;
 }
 
-/* Esconde o logo em texto, pois a imagem já possui o logo */
+/* Esconde o logo em texto */
 .brand-banner .joy-logo{
   display:none !important;
 }
@@ -27,18 +27,45 @@
   display:none !important;
 }
 
+/* =========================================
+   CORREÇÃO DO CABEÇALHO SOMENTE NO CELULAR
+========================================= */
+
 @media(max-width:760px){
+
   .brand-banner{
     width:100% !important;
     height:125px !important;
     min-height:125px !important;
+    max-height:125px !important;
 
     aspect-ratio:auto !important;
 
+    /* Mantém o logo inteiro no celular */
     background-size:contain !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
 
     background-color:#f7f4ee !important;
+
+    overflow:hidden !important;
   }
+
+  /* Caso o Admin use imagem <img> dentro do cabeçalho */
+  .brand-banner .joy-logo-image{
+    display:block !important;
+
+    width:100% !important;
+    max-width:100% !important;
+
+    height:125px !important;
+    max-height:125px !important;
+
+    object-fit:contain !important;
+    object-position:center center !important;
+
+    margin:0 auto !important;
+    padding:0 !important;
+  }
+
 }
