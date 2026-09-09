@@ -15,8 +15,9 @@
   background-image:none !important;
 }
 
+/* CLIENTE: manter o logo original visível */
 .brand-banner .joy-logo{
-  display:none !important;
+  display:block !important;
 }
 
 .brand-banner .joy-logo-image{
