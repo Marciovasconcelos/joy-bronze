@@ -1,0 +1,69 @@
+{
+  "name": "joy-bronze-admin",
+  "version": "1.0.0",
+  "description": "Painel administrativo Joy Bronze",
+  "main": "electron-main.cjs",
+  "author": "Joy Bronze",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2"
+  },
+  "devDependencies": {
+    "electron": "^38.2.1",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.joybronze.admin",
+    "productName": "Joy Bronze - Administrador",
+    "asar": true,
+    "files": [
+      "admin.html",
+      "admin.js",
+      "atendimentos-realizados.html",
+      "atendimentos-realizados.js",
+      "clientes.html",
+      "clientes.js",
+      "configuracoes.html",
+      "configuracoes.js",
+      "financeiro.html",
+      "financeiro.js",
+      "servicos.html",
+      "servicos.js",
+      "manual-agendamento.html",
+      "manual-agendamento.js",
+      "firebase-config.js",
+      "style.css",
+      "joy-bronze-concept.css",
+      "joy-header-fix.css",
+      "joy-layout-exato.css",
+      "manifest-admin.json",
+      "sw-admin.js"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "Joy-Bronze-Administrador-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Joy Bronze - Administrador"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "akatsukydeliverysushi-coder",
+      "repo": "joy-bronze",
+      "releaseType": "release"
+    }
+  }
+}
