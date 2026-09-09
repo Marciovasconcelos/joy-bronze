@@ -21,6 +21,7 @@
     "productName": "Joy Bronze - Administrador",
     "asar": true,
     "files": [
+     "electron-main.cjs", 
       "admin.html",
       "admin.js",
       "atendimentos-realizados.html",
@@ -62,7 +63,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "akatsukydeliverysushi-coder",
+      "owner": "Marciovasconcelos",
       "repo": "joy-bronze",
       "releaseType": "release"
     }
