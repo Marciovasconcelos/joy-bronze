@@ -25,13 +25,76 @@ async function carregarConfig(){
   if(s.exists()) config = {...config,...s.data()};
 }
 
+function duracaoDoServico(nome){
+  const n=(nome||"").toUpperCase();
+  const m=n.match(/(20|30|40|50)\s*MINUTOS?/);
+  if(m) return `${m[1]} minutos`;
+  if(n.includes("BANHO DE LUA")) return "Sessão especial";
+  return "Horário personalizado";
+}
+
+function fecharListaServicos(){
+  const lista=$("#servicoLista"), trigger=$("#servicoTrigger");
+  if(!lista || lista.hidden) return;
+  lista.hidden=true;
+  trigger?.setAttribute("aria-expanded","false");
+  document.querySelector(".service-picker")?.classList.remove("is-open");
+}
+
+function renderListaServicos(){
+  const select=$("#servico"), lista=$("#servicoLista"), resumo=$("#servicoResumo");
+  if(!select || !lista || !resumo) return;
+  const atual=select.value;
+  const options=[...select.options];
+  const selecionada=options.find(o=>o.value===atual)||options[0];
+  resumo.textContent=selecionada?.textContent||"Escolha o serviço";
+
+  lista.innerHTML=options.map((o,i)=>{
+    const nome=o.textContent.split(" — R$ ")[0];
+    const preco=(o.textContent.match(/R\$\s*([\d.,]+)/)||[])[1]||"";
+    const ativo=o.value===select.value;
+    return `<button type="button" class="service-option ${ativo?"is-selected":""}" role="option" aria-selected="${ativo}" data-value="${o.value}" data-index="${i}">
+      <span class="service-option-icon">♧</span>
+      <span class="service-option-copy"><strong>${nome}</strong><small>◷ ${duracaoDoServico(nome)}</small></span>
+      <span class="service-price">R$ ${preco}</span>
+      <span class="service-check">${ativo?"✓":""}</span>
+    </button>`;
+  }).join("");
+
+  lista.querySelectorAll(".service-option").forEach(btn=>{
+    btn.onclick=()=>{
+      select.value=btn.dataset.value;
+      renderListaServicos();
+      fecharListaServicos();
+    };
+  });
+}
+
+function configurarListaServicos(){
+  const trigger=$("#servicoTrigger"), lista=$("#servicoLista");
+  if(!trigger || !lista) return;
+  trigger.onclick=(e)=>{
+    e.stopPropagation();
+    const abrir=lista.hidden;
+    lista.hidden=!abrir;
+    trigger.setAttribute("aria-expanded",String(abrir));
+    document.querySelector(".service-picker")?.classList.toggle("is-open",abrir);
+  };
+  document.addEventListener("click",(e)=>{
+    if(!e.target.closest(".service-picker") && !e.target.closest("#servicoLista")) fecharListaServicos();
+  });
+}
+
 async function carregarServicos(){
   const s = await getDocs(collection(db,"servicos"));
-  $("#servico").innerHTML = s.empty
+  const select=$("#servico");
+  select.innerHTML = s.empty
     ? '<option value="">Nenhum serviço cadastrado</option>'
     : s.docs.filter(d=>d.data().ativo!==false).map(d =>
       `<option value="${d.id}">${d.data().nome} — R$ ${Number(d.data().preco||0).toFixed(2)}</option>`
     ).join("");
+  renderListaServicos();
+  configurarListaServicos();
 }
 
 async function carregarHorarios(){
