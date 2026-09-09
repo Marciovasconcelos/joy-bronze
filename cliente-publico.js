@@ -40,9 +40,30 @@ function textoServicosSelecionados() {
 
 function duracaoServicoMinutos(servico) {
 
+  const duracaoCadastrada = Number(
+    servico.duracaoMinutos ||
+    servico.duracao ||
+    0
+  );
+
+  if (duracaoCadastrada > 0) {
+    return duracaoCadastrada;
+  }
+
   const texto = String(
     servico.nome || ""
   );
+
+  const match = texto.match(
+    /(\d+)\s*MINUTOS?/i
+  );
+
+  if (match) {
+    return Number(match[1]);
+  }
+
+  return Number(config.intervalo || 60);
+}
 
   const match = texto.match(
     /(\d+)\s*MINUTOS?/i
@@ -361,13 +382,17 @@ async function carregarServicos() {
       const dados =
         d.data();
 
-      dadosServicos.push({
-        id: d.id,
-        nome: dados.nome || "Procedimento",
-        preco: Number(
-          dados.preco || 0
-        )
-      });
+   dadosServicos.push({
+   id: d.id,
+   nome: dados.nome || "Procedimento",
+   preco: Number(dados.preco || 0),
+ 
+  duracaoMinutos: Number(
+    dados.duracaoMinutos ||
+    dados.duracao ||
+    0
+  )
+});    
 
     });
 
