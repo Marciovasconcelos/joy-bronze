@@ -1,49 +1,36 @@
 /* Cabeçalho oficial BRONZE JOY CONCEPT — sem esticar ou deformar */
-.brand-banner{
-  width:100%!important;
-  height:clamp(150px,19vw,245px)!important;
-  min-height:0!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  background:#f5f0e8!important;
-  background-image:radial-gradient(circle at 50% 42%,#fffdf8 0%,#f5f0e8 62%,#ece4d8 100%)!important;
-  overflow:hidden!important;
-  border-bottom:1px solid #dccfbd!important;
-  box-sizing:border-box!important;
+```css
+/* CABEÇALHO COMPACTO JOY BRONZE */
+
+.brand-banner {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }
-.brand-banner::after{display:none!important}
-.joy-logo{
-  text-align:center;
-  color:#65421f;
-  font-family:Georgia,"Times New Roman",serif;
-  line-height:.86;
-  transform:translateY(-2px);
+
+.joy-logo {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
 }
-.joy-logo-main{
-  font-size:clamp(44px,6.4vw,100px);
-  font-weight:700;
-  letter-spacing:1px;
-  white-space:nowrap;
-  text-shadow:0 1px 0 #c8a26d,0 3px 8px rgba(74,43,18,.16);
+
+.joy-logo-main {
+  margin: 0 !important;
+  line-height: 1 !important;
 }
-.joy-logo-main span{
-  display:inline-block;
-  font-size:1.14em;
-  margin-left:.08em;
-  letter-spacing:0;
+
+.joy-logo-sub {
+  margin: 2px 0 0 !important;
+  line-height: 1 !important;
 }
-.joy-logo-sub{
-  margin-top:clamp(8px,1vw,15px);
-  margin-right:clamp(130px,16vw,250px);
-  font-family:Arial,sans-serif;
-  font-size:clamp(14px,1.55vw,28px);
-  font-weight:600;
-  letter-spacing:clamp(4px,.55vw,9px);
-  color:#674522;
+
+.brand-banner,
+.joy-logo,
+.joy-logo-main,
+.joy-logo-sub {
+  box-sizing: border-box;
 }
-@media(max-width:760px){
-  .brand-banner{height:128px!important}
-  .joy-logo-main{font-size:clamp(34px,10.5vw,56px);letter-spacing:0}
-  .joy-logo-sub{font-size:12px;letter-spacing:4px;margin-top:9px;margin-right:110px}
-}
+```
