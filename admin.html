@@ -23,7 +23,20 @@
     <div class="stat-card"><span>♧</span><div><small>Serviços cadastrados</small><b id="servicosCadastrados">—</b></div></div>
   </section>
   <section class="quick-panel"><h2>ϟ &nbsp; Ações rápidas</h2><a href="servicos.html">♧ <span>Adicionar novo serviço</span></a><a href="#">♙ <span>Cadastrar novo cliente</span></a><a href="#agenda">▣ <span>Ver agendamentos</span></a></section>
-  <section id="agenda" class="admin-panel"><h2>📅 Agenda de hoje</h2><label>Filtrar por data</label><input id="filtroData" type="date"><div id="agenda">Carregando...</div></section>
+  <section id="agenda" class="admin-panel"><h2>📅 Agenda</h2>
+  <div class="admin-calendar" id="adminCalendario">
+    <div class="calendar-head">
+      <button type="button" id="adminMesAnterior" aria-label="Mês anterior">‹</button>
+      <strong id="adminMesCalendario"></strong>
+      <button type="button" id="adminProximoMes" aria-label="Próximo mês">›</button>
+    </div>
+    <div class="calendar-weekdays"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+    <div id="adminDiasCalendario" class="calendar-days"></div>
+    <div class="calendar-legend"><span><i class="legend-free"></i> Sem agendamento</span><span><i class="legend-booked"></i> Com agendamento</span></div>
+  </div>
+  <label>Data selecionada</label><input id="filtroData" type="date">
+  <div id="agenda">Carregando...</div>
+</section>
   <section class="admin-panel"><h2>✅ Atendimentos realizados</h2><p>Os agendamentos concluídos aparecem aqui após o pagamento ser registrado.</p><div id="realizados">Carregando...</div></section>
   <div class="admin-footer"><span></span><em>Beleza, bem-estar e autoestima<br>em cada detalhe!</em><span></span></div><span id="dataAtual" hidden></span>
 </main></div>
