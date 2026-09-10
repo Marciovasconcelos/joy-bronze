@@ -70,7 +70,7 @@
   <span>⇥</span> Sair
 </button>
 
-<button id="installAdmin" type="button" hidden>
+<button id="installAdmin" type="button">
   📲 Instalar App
 </button>
 
@@ -261,11 +261,16 @@ let adminInstallPrompt = null;
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("./sw-admin.js")
-    .catch(() => {});
+    .catch(error => {
+      console.warn(
+        "Erro ao registrar o aplicativo:",
+        error
+      );
+    });
 }
 
 
-/* CAPTURA A OPÇÃO DE INSTALAÇÃO */
+/* GUARDA O PEDIDO DE INSTALAÇÃO */
 
 window.addEventListener(
   "beforeinstallprompt",
@@ -275,18 +280,11 @@ window.addEventListener(
 
     adminInstallPrompt = event;
 
-    const botao =
-      document.querySelector("#installAdmin");
-
-    if (botao) {
-      botao.hidden = false;
-    }
-
   }
 );
 
 
-/* BOTÃO INSTALAR APP */
+/* BOTÃO INSTALAR */
 
 document
   .querySelector("#installAdmin")
@@ -294,26 +292,49 @@ document
     "click",
     async () => {
 
-      if (!adminInstallPrompt) return;
+      /* ANDROID / CHROME */
 
-      adminInstallPrompt.prompt();
+      if (adminInstallPrompt) {
 
-      await adminInstallPrompt.userChoice;
+        adminInstallPrompt.prompt();
 
-      adminInstallPrompt = null;
+        const resultado =
+          await adminInstallPrompt.userChoice;
 
-      const botao =
-        document.querySelector("#installAdmin");
+        if (
+          resultado.outcome ===
+          "accepted"
+        ) {
 
-      if (botao) {
-        botao.hidden = true;
+          adminInstallPrompt = null;
+
+        }
+
+        return;
+
       }
+
+
+      /* OUTROS NAVEGADORES */
+
+      alert(
+        "Para instalar o Joy Bronze Admin:\n\n" +
+
+        "Android Chrome:\n" +
+        "Abra o menu ⋮ e escolha " +
+        "\"Instalar app\" ou " +
+        "\"Adicionar à tela inicial\".\n\n" +
+
+        "iPhone Safari:\n" +
+        "Toque em Compartilhar ⎋ e escolha " +
+        "\"Adicionar à Tela de Início\"."
+      );
 
     }
   );
 
 
-/* QUANDO O APP FOR INSTALADO */
+/* APP INSTALADO */
 
 window.addEventListener(
   "appinstalled",
@@ -321,16 +342,6 @@ window.addEventListener(
 
     adminInstallPrompt = null;
 
-    const botao =
-      document.querySelector("#installAdmin");
-
-    if (botao) {
-      botao.hidden = true;
-    }
-
   }
 );
 </script>
-  
-</body>
-</html>
