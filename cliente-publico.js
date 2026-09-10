@@ -357,7 +357,195 @@ function fecharListaServicos() {
 }
 
 function renderListaServicos() {
-  
+
+  const select =
+    $("#servico");
+
+  const lista =
+    $("#servicoLista");
+
+  const resumo =
+    $("#servicoResumo");
+
+  if (!select || !lista || !resumo) return;
+
+  const selecionados =
+    obterServicosSelecionados();
+
+  resumo.textContent =
+    selecionados.length === 0
+      ? "Escolha um ou mais procedimentos"
+      : selecionados.length === 1
+        ? selecionados[0].nome
+        : `${selecionados.length} procedimentos selecionados`;
+
+
+  const avulsos =
+    dadosServicos.filter(
+      servico =>
+        servico.categoria !== "pacote"
+    );
+
+  const pacotes =
+    dadosServicos.filter(
+      servico =>
+        servico.categoria === "pacote"
+    );
+
+
+  function criarServico(servico) {
+
+    const ativo =
+      servicosSelecionados.has(
+        servico.id
+      );
+
+    return `
+      <button
+        type="button"
+        class="service-option ${
+          ativo
+            ? "is-selected"
+            : ""
+        }"
+        data-value="${servico.id}"
+      >
+
+        <span class="service-option-icon">
+          ✨
+        </span>
+
+        <span class="service-option-copy">
+
+          <strong>
+            ${servico.nome}
+          </strong>
+
+          <small>
+            ⏱️ ${duracaoServicoMinutos(
+              servico
+            )} minutos
+          </small>
+
+        </span>
+
+        <span class="service-price">
+
+          R$ ${Number(
+            servico.preco || 0
+          ).toFixed(2)}
+
+        </span>
+
+        <span class="service-check">
+
+          ${ativo ? "✓" : ""}
+
+        </span>
+
+      </button>
+    `;
+
+  }
+
+
+  let html = "";
+
+
+  if (avulsos.length) {
+
+    html += `
+      <div class="service-category-title">
+        💅 SERVIÇOS AVULSOS
+      </div>
+    `;
+
+    html +=
+      avulsos
+        .map(criarServico)
+        .join("");
+
+  }
+
+
+  if (pacotes.length) {
+
+    html += `
+      <div class="service-category-title">
+        🎁 PACOTES E COMBOS
+      </div>
+    `;
+
+    html +=
+      pacotes
+        .map(criarServico)
+        .join("");
+
+  }
+
+
+  lista.innerHTML =
+    html;
+
+
+  lista
+    .querySelectorAll(
+      ".service-option"
+    )
+    .forEach(
+      btn => {
+
+        btn.onclick = () => {
+
+          const id =
+            btn.dataset.value;
+
+          if (
+            servicosSelecionados.has(
+              id
+            )
+          ) {
+
+            servicosSelecionados.delete(
+              id
+            );
+
+          } else {
+
+            servicosSelecionados.add(
+              id
+            );
+
+          }
+
+
+          const primeiro =
+            obterServicosSelecionados()[0];
+
+          if (primeiro) {
+
+            select.value =
+              primeiro.id;
+
+          }
+
+
+          renderListaServicos();
+
+          atualizarResumoAgendamento();
+
+        };
+
+      }
+    );
+
+}
+
+
+/* ==========================================
+   CONFIGURAR LISTA DE SERVIÇOS
+========================================== */
+
 function configurarListaServicos() {
 
   const trigger =
@@ -395,6 +583,7 @@ function configurarListaServicos() {
 
     };
 
+
   document.addEventListener(
     "click",
     e => {
@@ -417,6 +606,11 @@ function configurarListaServicos() {
 
 }
 
+
+/* ==========================================
+   CARREGAR SERVIÇOS DO FIREBASE
+========================================== */
+
 async function carregarServicos() {
 
   const s =
@@ -426,6 +620,79 @@ async function carregarServicos() {
         "servicos"
       )
     );
+
+  const select =
+    $("#servico");
+
+  dadosServicos.length =
+    0;
+
+
+  s.docs
+    .filter(
+      d =>
+        d.data().ativo !== false
+    )
+    .forEach(
+      d => {
+
+        const dados =
+          d.data();
+
+        dadosServicos.push({
+
+          id:
+            d.id,
+
+          nome:
+            dados.nome ||
+            "Procedimento",
+
+          preco:
+            Number(
+              dados.preco || 0
+            ),
+
+          duracaoMinutos:
+            Number(
+              dados.duracaoMinutos ||
+              dados.duracao ||
+              0
+            ),
+
+          categoria:
+            dados.categoria === "pacote"
+              ? "pacote"
+              : "avulso"
+
+        });
+
+      }
+    );
+
+
+  select.innerHTML =
+    dadosServicos.length
+      ? dadosServicos
+          .map(
+            servico =>
+              `<option value="${servico.id}">
+                ${servico.nome}
+              </option>`
+          )
+          .join("")
+      : `
+        <option value="">
+          Nenhum serviço cadastrado
+        </option>
+      `;
+
+
+  renderListaServicos();
+
+  configurarListaServicos();
+
+}
 
  
 /* ==========================================
