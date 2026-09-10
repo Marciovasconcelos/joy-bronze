@@ -70,11 +70,14 @@
   <span>⇥</span> Sair
 </button>
 
+<button id="installAdmin" type="button" hidden>
+  📲 Instalar App
+</button>
+
 </nav>
 </aside>
 
 <main class="admin-content">
-
 <section class="admin-welcome">
   <span class="leaf">♧</span>
   <div>
@@ -252,14 +255,81 @@ em cada detalhe!
 </main>
 </div>
 
-<script type="module" src="admin.js"></script>
-
 <script>
+let adminInstallPrompt = null;
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("./sw-admin.js")
     .catch(() => {});
 }
+
+
+/* CAPTURA A OPÇÃO DE INSTALAÇÃO */
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    adminInstallPrompt = event;
+
+    const botao =
+      document.querySelector("#installAdmin");
+
+    if (botao) {
+      botao.hidden = false;
+    }
+
+  }
+);
+
+
+/* BOTÃO INSTALAR APP */
+
+document
+  .querySelector("#installAdmin")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (!adminInstallPrompt) return;
+
+      adminInstallPrompt.prompt();
+
+      await adminInstallPrompt.userChoice;
+
+      adminInstallPrompt = null;
+
+      const botao =
+        document.querySelector("#installAdmin");
+
+      if (botao) {
+        botao.hidden = true;
+      }
+
+    }
+  );
+
+
+/* QUANDO O APP FOR INSTALADO */
+
+window.addEventListener(
+  "appinstalled",
+  () => {
+
+    adminInstallPrompt = null;
+
+    const botao =
+      document.querySelector("#installAdmin");
+
+    if (botao) {
+      botao.hidden = true;
+    }
+
+  }
+);
 </script>
   
 </body>
