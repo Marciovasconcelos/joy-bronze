@@ -1,25 +1,42 @@
-/* CABEÇALHO COM LOGO OFICIAL */
+/* ==========================================
+   CABEÇALHO COM LOGO OFICIAL
+========================================== */
 
 .brand-banner{
   width:100% !important;
-  height:auto !important;
-  min-height:0 !important;
-  aspect-ratio:3 / 1;
+
+  height:280px !important;
+  min-height:280px !important;
+  max-height:280px !important;
 
   background-image:url("./logo-joy.png") !important;
-  background-size:cover !important;
-  background-position:center !important;
+
+  /* Mostra o logo inteiro no computador */
+  background-size:contain !important;
+  background-position:center center !important;
   background-repeat:no-repeat !important;
+
+  background-color:#f7f4ee !important;
 
   padding:0 !important;
   margin:0 !important;
+
   overflow:hidden !important;
 
   border-bottom:1px solid #dccfbd !important;
 }
 
-/* Esconde o logo em texto */
+
+/* ==========================================
+   ESCONDE ELEMENTOS DUPLICADOS NO COMPUTADOR
+========================================== */
+
 .brand-banner .joy-logo{
+  display:none !important;
+}
+
+/* Esta imagem estava criando o retângulo branco */
+.brand-banner .joy-logo-image{
   display:none !important;
 }
 
@@ -27,32 +44,37 @@
   display:none !important;
 }
 
-/* =========================================
-   CORREÇÃO DO CABEÇALHO SOMENTE NO CELULAR
-========================================= */
+
+/* ==========================================
+   CORREÇÃO DO CABEÇALHO NO CELULAR
+========================================== */
 
 @media(max-width:760px){
 
   .brand-banner{
+
     width:100% !important;
+
     height:125px !important;
     min-height:125px !important;
     max-height:125px !important;
 
-    aspect-ratio:auto !important;
-
-    /* Mantém o logo inteiro no celular */
     background-size:contain !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
 
     background-color:#f7f4ee !important;
 
+    padding:0 !important;
+    margin:0 !important;
+
     overflow:hidden !important;
+
   }
 
-  /* Caso o Admin use imagem <img> dentro do cabeçalho */
+  /* No celular mantém a imagem como estava funcionando */
   .brand-banner .joy-logo-image{
+
     display:block !important;
 
     width:100% !important;
@@ -66,6 +88,7 @@
 
     margin:0 auto !important;
     padding:0 !important;
+
   }
 
 }
